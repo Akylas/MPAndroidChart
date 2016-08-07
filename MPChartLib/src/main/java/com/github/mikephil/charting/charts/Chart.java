@@ -1140,6 +1140,15 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
     public void setDescriptionColor(int color) {
         mDescPaint.setColor(color);
     }
+    
+    /**
+     * Sets the description text alignment.
+     *
+     * @param align
+     */
+    public void setDescriptionTextAlign(Align align) {
+        mDescPaint.setTextAlign(align);
+    }
 
     /**
      * Sets extra offsets (around the chart view) to be appended to the
