@@ -180,6 +180,16 @@ public class YAxis extends AxisBase {
     }
 
     /**
+     * set this to true to only show the minimum and maximum value
+     * default: false
+     *
+     * @param enabled
+     */
+    public void setShowOnlyMinMax(boolean enabled) {
+        mShowOnlyMinMaxEnabled = enabled;
+    }
+    
+    /**
      * If this is set to true, the y-axis is inverted which means that low values are on top of
      * the chart, high values
      * on bottom.

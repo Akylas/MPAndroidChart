@@ -204,36 +204,43 @@ public abstract class AxisRenderer extends Renderer {
             // no forced count
         } else {
 
-            double first = interval == 0.0 ? 0.0 : Math.ceil(yMin / interval) * interval;
-            if(centeringEnabled) {
-                first -= interval;
-            }
+            if (mAxis.isShowOnlyMinMaxEnabled())
+            {
+                mAxis.mEntries = new float[] {yMin, yMax};
+                mAxis.mEntryCount = 2;
+            } else {
+                double first = interval == 0.0 ? 0.0 : Math.ceil(yMin / interval) * interval;
+                if(centeringEnabled) {
+                    first -= interval;
+                }
 
-            double last = interval == 0.0 ? 0.0 : Utils.nextUp(Math.floor(yMax / interval) * interval);
+                double last = interval == 0.0 ? 0.0 : Utils.nextUp(Math.floor(yMax / interval) * interval);
 
-            double f;
-            int i;
+                double f;
+                int i;
 
-            if (interval != 0.0) {
-                for (f = first; f <= last; f += interval) {
-                    ++n;
+                if (interval != 0.0) {
+                    for (f = first; f <= last; f += interval) {
+                        ++n;
+                    }
+                }
+
+                mAxis.mEntryCount = n;
+
+                if (mAxis.mEntries.length < n) {
+                    // Ensure stops contains at least numStops elements.
+                    mAxis.mEntries = new float[n];
+                }
+
+                for (f = first, i = 0; i < n; f += interval, ++i) {
+
+                    if (f == 0.0) // Fix for negative zero case (Where value == -0.0, and 0.0 == -0.0)
+                        f = 0.0;
+
+                    mAxis.mEntries[i] = (float) f;
                 }
             }
-
-            mAxis.mEntryCount = n;
-
-            if (mAxis.mEntries.length < n) {
-                // Ensure stops contains at least numStops elements.
-                mAxis.mEntries = new float[n];
-            }
-
-            for (f = first, i = 0; i < n; f += interval, ++i) {
-
-                if (f == 0.0) // Fix for negative zero case (Where value == -0.0, and 0.0 == -0.0)
-                    f = 0.0;
-
-                mAxis.mEntries[i] = (float) f;
-            }
+            
         }
 
         // set decimals

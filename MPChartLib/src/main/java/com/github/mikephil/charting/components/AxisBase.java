@@ -31,6 +31,8 @@ public abstract class AxisBase extends ComponentBase {
     private int mAxisLineColor = Color.GRAY;
 
     private float mAxisLineWidth = 1f;
+    
+    protected boolean mShowOnlyMinMaxEnabled = false;
 
     /**
      * the actual array of entries
@@ -696,5 +698,9 @@ public abstract class AxisBase extends ComponentBase {
 
         // actual range
         this.mAxisRange = Math.abs(max - min);
+    }
+
+    public boolean isShowOnlyMinMaxEnabled() {
+        return mShowOnlyMinMaxEnabled;
     }
 }
