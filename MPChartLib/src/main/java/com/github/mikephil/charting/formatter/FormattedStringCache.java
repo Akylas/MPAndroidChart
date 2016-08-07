@@ -130,7 +130,7 @@ public class FormattedStringCache {
         private ArrayList<Float> cachedValues = new ArrayList<>();
         private ArrayList<String> cachedStrings = new ArrayList<>();
 
-        public String getFormattedValue(float value) {
+        public String getFormattedValue(int index, float value) {
 
             boolean alreadyHasValue = false;
             int vCount =  cachedValues.size();

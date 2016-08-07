@@ -39,10 +39,10 @@ public class DefaultAxisValueFormatter implements AxisValueFormatter {
     }
 
     @Override
-    public String getFormattedValue(float value, AxisBase axis) {
+    public String getFormattedValue(int index, float value, AxisBase axis) {
 
         // TODO: There should be a better way to do this.  Floats are not the best keys...
-        return mFormattedStringCache.getFormattedValue(value);
+        return mFormattedStringCache.getFormattedValue(index, value);
 
     }
 

@@ -41,9 +41,9 @@ public class PercentFormatter implements ValueFormatter, AxisValueFormatter {
 
     // AxisValueFormatter
     @Override
-    public String getFormattedValue(float value, AxisBase axis) {
+    public String getFormattedValue(int index, float value, AxisBase axis) {
         // TODO: Find a better way to do this.  Float isn't the best key...
-        return mFormattedStringCacheAxis.getFormattedValue(value) + " %";
+        return mFormattedStringCacheAxis.getFormattedValue(index, value) + " %";
     }
 
     @Override
