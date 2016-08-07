@@ -207,6 +207,7 @@ public class YAxisRenderer extends AxisRenderer {
 
         mZeroLinePaint.setColor(mYAxis.getZeroLineColor());
         mZeroLinePaint.setStrokeWidth(mYAxis.getZeroLineWidth());
+        mZeroLinePaint.setPathEffect(mYAxis.getZeroLineDashPathEffect());
 
         Path zeroLinePath = mDrawZeroLinePath;
         zeroLinePath.reset();

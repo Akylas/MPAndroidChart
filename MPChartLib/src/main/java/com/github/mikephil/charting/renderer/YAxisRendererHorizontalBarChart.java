@@ -183,6 +183,7 @@ public class YAxisRendererHorizontalBarChart extends YAxisRenderer {
 
         mZeroLinePaint.setColor(mYAxis.getZeroLineColor());
         mZeroLinePaint.setStrokeWidth(mYAxis.getZeroLineWidth());
+        mZeroLinePaint.setPathEffect(mYAxis.getZeroLineDashPathEffect());
 
         Path zeroLinePath = mDrawZeroLinePathBuffer;
         zeroLinePath.reset();

@@ -1,6 +1,7 @@
 package com.github.mikephil.charting.components;
 
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 
 import com.github.mikephil.charting.utils.Utils;
@@ -42,6 +43,11 @@ public class YAxis extends AxisBase {
      * Width of the zero line in pixels
      */
     protected float mZeroLineWidth = 1f;
+    
+    /**
+     * the path effect of the zero line that makes dashed lines possible
+     */
+    private DashPathEffect mZeroLineDashPathEffect = null;
 
     /**
      * axis space from the largest value to the top in percent of the total axis range
@@ -297,6 +303,57 @@ public class YAxis extends AxisBase {
      */
     public void setZeroLineWidth(float width) {
         this.mZeroLineWidth = Utils.convertDpToPixel(width);
+    }
+    
+    /**
+     * Enables the zero line to be drawn in dashed mode, e.g. like this
+     * "- - - - - -". THIS ONLY WORKS IF HARDWARE-ACCELERATION IS TURNED OFF.
+     * Keep in mind that hardware acceleration boosts performance.
+     *
+     * @param lineLength  the length of the line pieces
+     * @param spaceLength the length of space in between the pieces
+     * @param phase       offset, in degrees (normally, use 0)
+     */
+    public void enableZeroLineDashedLine(float lineLength, float spaceLength, float phase) {
+        mZeroLineDashPathEffect = new DashPathEffect(new float[]{
+                lineLength, spaceLength
+        }, phase);
+    }
+    
+    /**
+     * Enables the zero line to be drawn in dashed mode, e.g. like this
+     * "- - - - - -". THIS ONLY WORKS IF HARDWARE-ACCELERATION IS TURNED OFF.
+     * Keep in mind that hardware acceleration boosts performance.
+     *
+     * @param effect  the DashPathEffect
+     */
+    public void setZeroLineDashedLine(DashPathEffect effect) {
+        mZeroLineDashPathEffect = effect;
+    }
+
+    /**
+     * Disables the zero line to be drawn in dashed mode.
+     */
+    public void disableZeroLineDashedLine() {
+        mZeroLineDashPathEffect = null;
+    }
+
+    /**
+     * Returns true if the zero dashed-line effect is enabled, false if not.
+     *
+     * @return
+     */
+    public boolean isZeroLineDashedLineEnabled() {
+        return mZeroLineDashPathEffect == null ? false : true;
+    }
+
+    /**
+     * returns the DashPathEffect that is set for zero line
+     *
+     * @return
+     */
+    public DashPathEffect getZeroLineDashPathEffect() {
+        return mZeroLineDashPathEffect;
     }
 
     /**
