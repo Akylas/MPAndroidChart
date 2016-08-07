@@ -365,6 +365,21 @@ public abstract class ChartData<T extends IDataSet<? extends Entry>> {
 
         return mDataSets.get(index);
     }
+    
+    
+    
+    /**
+     * set the DataSets dynamically.
+     *
+     * @param sets
+     */
+    public void setDataSets(List<T> sets) {
+        mDataSets.clear();
+        if (sets != null) {
+            mDataSets.addAll(sets);
+        }
+        notifyDataChanged();
+   }
 
     /**
      * Adds a DataSet dynamically.
