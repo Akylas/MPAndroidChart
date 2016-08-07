@@ -44,7 +44,14 @@ public class LimitLine extends ComponentBase {
     public enum LimitLabelPosition {
         LEFT_TOP, LEFT_BOTTOM, RIGHT_TOP, RIGHT_BOTTOM
     }
-
+    
+    /**
+     * Constructor
+     * 
+     */
+    public LimitLine() {
+    }
+    
     /**
      * Constructor with limit.
      * 
@@ -67,6 +74,15 @@ public class LimitLine extends ComponentBase {
         mLabel = label;
     }
 
+    /**
+     * Returns the limit that is set for this line.
+     * 
+     * @return
+     */
+    public void setLimit(float limit) {
+        mLimit = limit;
+    }
+    
     /**
      * Returns the limit that is set for this line.
      * 
@@ -118,7 +134,16 @@ public class LimitLine extends ComponentBase {
     public int getLineColor() {
         return mLineColor;
     }
-
+    
+    /**
+     * Enables the line to be drawn in dashed mode, e.g. like this "- - - - - -"
+     * 
+     * @param effect the DashPathEffect
+     */
+    public void setDashedLine(DashPathEffect effect) {
+        mDashPathEffect = effect;
+    }
+    
     /**
      * Enables the line to be drawn in dashed mode, e.g. like this "- - - - - -"
      * 
