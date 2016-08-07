@@ -77,6 +77,9 @@ public class XAxisRenderer extends AxisRenderer {
     protected void computeSize() {
 
         String longest = mXAxis.getLongestLabel();
+        for(int i = 0; i < mXAxis.mSpaceBeetweenLabels; i++) {
+            longest += "Q";
+        }
 
         mAxisLabelPaint.setTypeface(mXAxis.getTypeface());
         mAxisLabelPaint.setTextSize(mXAxis.getTextSize());
@@ -185,7 +188,7 @@ public class XAxisRenderer extends AxisRenderer {
 
         float[] positions = new float[mXAxis.mEntryCount * 2];
 
-        for (int i = 0; i < positions.length; i += 2) {
+        for (int i = 0; i < positions.length; i += (2 * mXAxis.mAxisLabelModulus)) {
 
             // only fill x values
             if (centeringEnabled) {
@@ -197,7 +200,7 @@ public class XAxisRenderer extends AxisRenderer {
 
         mTrans.pointValuesToPixel(positions);
 
-        for (int i = 0; i < positions.length; i += 2) {
+        for (int i = 0; i < positions.length; i += (2 * mXAxis.mAxisLabelModulus)) {
 
             float x = positions[i];
 

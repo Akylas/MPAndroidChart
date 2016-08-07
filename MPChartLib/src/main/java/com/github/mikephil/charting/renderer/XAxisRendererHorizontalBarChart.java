@@ -137,7 +137,7 @@ public class XAxisRendererHorizontalBarChart extends XAxisRenderer {
 
         float[] positions = new float[mXAxis.mEntryCount * 2];
 
-        for (int i = 0; i < positions.length; i += 2) {
+        for (int i = 0; i < positions.length; i += (2 * mXAxis.mAxisLabelModulus)) {
 
             // only fill x values
             if (centeringEnabled) {
@@ -149,7 +149,7 @@ public class XAxisRendererHorizontalBarChart extends XAxisRenderer {
 
         mTrans.pointValuesToPixel(positions);
 
-        for (int i = 0; i < positions.length; i += 2) {
+        for (int i = 0; i < positions.length; i += (2 * mXAxis.mAxisLabelModulus)) {
 
             float y = positions[i + 1];
 

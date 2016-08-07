@@ -53,6 +53,21 @@ public class XAxis extends AxisBase {
     private XAxisPosition mPosition = XAxisPosition.TOP;
 
     /**
+     * the space that should be left out (in characters) between the x-axis labels This only applies if the number of labels that will be skipped in between drawn axis labels is not custom set.
+     */
+    public int mSpaceBeetweenLabels = 4;
+    
+    /**
+     * the modulus that indicates if a value at a specified index in an array(list) for the x-axis-labels is drawn or not. Draw when `(index % modulus) == 0`.
+     */
+    public int mAxisLabelModulus = 1;
+    
+    /**
+     * Is axisLabelModulus a custom value or auto calculated? If false, then it's auto, if true, then custom.
+     */
+    private boolean mIsAxisLabelModulusCustom = false;
+
+    /**
      * enum for the position of the x-labels relative to the chart
      */
     public enum XAxisPosition {
@@ -114,5 +129,40 @@ public class XAxis extends AxisBase {
      */
     public boolean isAvoidFirstLastClippingEnabled() {
         return mAvoidFirstLastClipping;
+    }
+    
+    
+    public void setLabelsToSkip(int count)
+    {
+        mIsAxisLabelModulusCustom = true;
+
+        if (count < 0)
+        {
+            mAxisLabelModulus = 1;
+        }
+        else
+        {
+            mAxisLabelModulus = count + 1;
+        }
+    }
+    
+    /**
+     * Calling this will disable a custom number of labels to be skipped (set by `setLabelsToSkip(...)`) while drawing the x-axis. Instead, the number of values to skip will again be calculated automatically.
+     *
+     * @return
+     */
+    public void resetLabelsToSkip()
+    {
+        mIsAxisLabelModulusCustom = false;
+    }
+    
+    /**
+     * returns: true if a custom axis-modulus has been set that determines the number of labels to skip when drawing.
+     *
+     * @return
+     */
+    public boolean isAxisModulusCustom()
+    {
+        return mIsAxisLabelModulusCustom;
     }
 }
