@@ -1274,7 +1274,7 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      *
      * @param size
      */
-    public void ssetNoDataTextTextSize(float size) {
+    public void ssetNoDataTextSize(float size) {
 
         if (size > 16f)
             size = 16f;
