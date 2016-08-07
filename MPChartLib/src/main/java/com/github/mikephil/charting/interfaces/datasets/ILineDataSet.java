@@ -1,6 +1,7 @@
 package com.github.mikephil.charting.interfaces.datasets;
 
 import android.graphics.DashPathEffect;
+import android.graphics.Paint.Cap;
 import android.graphics.drawable.Drawable;
 
 import com.github.mikephil.charting.data.Entry;
@@ -86,6 +87,13 @@ public interface ILineDataSet extends ILineRadarDataSet<Entry> {
      * @return
      */
     DashPathEffect getDashPathEffect();
+    
+    /**
+     * Returns the Cap that is used for drawing the lines.
+     *
+     * @return
+     */
+    public Cap getLineStrokeCap();
 
     /**
      * Returns true if the dashed-line effect is enabled, false if not.

@@ -4,6 +4,7 @@ package com.github.mikephil.charting.data;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
+import android.graphics.Paint.Cap;
 
 import com.github.mikephil.charting.formatter.DefaultFillFormatter;
 import com.github.mikephil.charting.formatter.FillFormatter;
@@ -50,6 +51,8 @@ public class LineDataSet extends LineRadarDataSet<Entry> implements ILineDataSet
      * the path effect of this DataSet that makes dashed lines possible
      */
     private DashPathEffect mDashPathEffect = null;
+
+    private Cap mLineStrokeCap = Cap.SQUARE;
 
     /**
      * formatter for customizing the position of the fill-line
@@ -239,6 +242,24 @@ public class LineDataSet extends LineRadarDataSet<Entry> implements ILineDataSet
         return mDashPathEffect;
     }
 
+    /**
+     * Sets the line cap
+     *
+     * @param cap
+     */
+    public void setLineStrokeCap(Cap cap) {
+        mLineStrokeCap = cap;
+    }
+    
+    /**
+     * Returns the cap used to stroke line.
+     *
+     * @return
+     */
+    public Cap getLineStrokeCap() {
+        return mLineStrokeCap;
+    }
+    
     /**
      * set this to true to enable the drawing of circle indicators for this
      * DataSet, default true
