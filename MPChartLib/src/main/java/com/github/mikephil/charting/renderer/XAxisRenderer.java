@@ -37,6 +37,7 @@ public class XAxisRenderer extends AxisRenderer {
         mGridPaint.setColor(mXAxis.getGridColor());
         mGridPaint.setStrokeWidth(mXAxis.getGridLineWidth());
         mGridPaint.setPathEffect(mXAxis.getGridDashPathEffect());
+        mGridPaint.setStrokeCap(mXAxis.getGridStrokeCap());
     }
 
     @Override
@@ -111,6 +112,7 @@ public class XAxisRenderer extends AxisRenderer {
         mAxisLabelPaint.setTypeface(mXAxis.getTypeface());
         mAxisLabelPaint.setTextSize(mXAxis.getTextSize());
         mAxisLabelPaint.setColor(mXAxis.getTextColor());
+        mAxisLabelPaint.setStrokeCap(mXAxis.getAxisLineStrokeCap());
 
         MPPointF pointF = MPPointF.getInstance(0,0);
         if (mXAxis.getPosition() == XAxisPosition.TOP) {

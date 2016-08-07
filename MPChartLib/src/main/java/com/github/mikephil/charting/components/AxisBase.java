@@ -3,6 +3,7 @@ package com.github.mikephil.charting.components;
 
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
+import android.graphics.Paint.Cap;
 import android.util.Log;
 
 import com.github.mikephil.charting.formatter.AxisValueFormatter;
@@ -28,9 +29,13 @@ public abstract class AxisBase extends ComponentBase {
 
     private float mGridLineWidth = 1f;
 
+    private Cap mGridStrokeCap = Cap.SQUARE;
+
     private int mAxisLineColor = Color.GRAY;
 
     private float mAxisLineWidth = 1f;
+    
+    private Cap mAxisLineStrokeCap = Cap.SQUARE;
     
     protected boolean mShowOnlyMinMaxEnabled = false;
 
@@ -230,6 +235,24 @@ public abstract class AxisBase extends ComponentBase {
     public float getAxisLineWidth() {
         return mAxisLineWidth;
     }
+    
+    /**
+     * Sets the line cap of the axis line
+     *
+     * @param cap
+     */
+    public void setAxisLineStrokeCap(Cap cap) {
+        mAxisLineStrokeCap = cap;
+    }
+    
+    /**
+     * Returns the cap used to stroke the axis line.
+     *
+     * @return
+     */
+    public Cap getAxisLineStrokeCap() {
+        return mAxisLineStrokeCap;
+    }
 
     /**
      * Sets the width of the grid lines that are drawn away from each axis
@@ -249,6 +272,24 @@ public abstract class AxisBase extends ComponentBase {
      */
     public float getGridLineWidth() {
         return mGridLineWidth;
+    }
+    
+    /**
+     * Sets the line cap of the grid lines
+     *
+     * @param cap
+     */
+    public void setGridStrokeCap(Cap cap) {
+        mGridStrokeCap = cap;
+    }
+    
+    /**
+     * Returns the cap used to stroke the grid lines.
+     *
+     * @return
+     */
+    public Cap getGridStrokeCap() {
+        return mGridStrokeCap;
     }
 
     /**
