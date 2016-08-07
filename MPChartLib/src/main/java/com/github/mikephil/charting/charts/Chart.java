@@ -1259,6 +1259,30 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
     public void setNoDataTextColor(int color) {
         mInfoPaint.setColor(color);
     }
+    
+    /**
+     * sets the typeface for the no data text paint
+     *
+     * @param t
+     */
+    public void setNoDataTextTypeface(Typeface t) {
+        mInfoPaint.setTypeface(t);
+    }
+
+    /**
+     * sets the size of the no data text in pixels, min 6f, max 16f
+     *
+     * @param size
+     */
+    public void ssetNoDataTextTextSize(float size) {
+
+        if (size > 16f)
+            size = 16f;
+        if (size < 6f)
+            size = 6f;
+
+        mInfoPaint.setTextSize(Utils.convertDpToPixel(size));
+    }
 
     /**
      * Sets descriptive text to explain to the user why there is no chart
