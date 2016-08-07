@@ -31,6 +31,8 @@ public class LimitLine extends ComponentBase {
 
     /** label string that is drawn next to the limit line */
     private String mLabel = "";
+    
+    private boolean mDrawLabel = true;
 
     /** the path effect of this LimitLine that makes dashed lines possible */
     private DashPathEffect mDashPathEffect = null;
@@ -193,7 +195,16 @@ public class LimitLine extends ComponentBase {
     public LimitLabelPosition getLabelPosition() {
         return mLabelPosition;
     }
-
+    
+    /**
+     * Sets wether to draw the label or not
+     * 
+     * @param draw
+     */
+    public void setDrawLabel(boolean draw) {
+        mDrawLabel = draw;
+    }
+    
     /**
      * Sets the label that is drawn next to the limit line. Provide "" if no
      * label is required.
@@ -210,6 +221,6 @@ public class LimitLine extends ComponentBase {
      * @return
      */
     public String getLabel() {
-        return mLabel;
+        return mDrawLabel ? mLabel : null;
     }
 }
