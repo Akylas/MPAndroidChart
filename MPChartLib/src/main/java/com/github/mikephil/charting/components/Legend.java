@@ -100,6 +100,9 @@ public class Legend extends ComponentBase {
      * the size of the legend forms/shapes
      */
     private float mFormSize = 8f;
+    
+    private float mFormLineWidth = 3f;
+
 
     /**
      * the space between the legend entries on a horizontal axis, default 6f
@@ -626,6 +629,24 @@ public class Legend extends ComponentBase {
         return mFormSize;
     }
 
+    /**
+     * sets the width in pixels of the legend forms line, this is internally converted
+     * in dp, default 3f
+     *
+     * @param width
+     */
+    public void setFormLineWidth(float width) {
+        mFormLineWidth = Utils.convertDpToPixel(width);
+    }
+
+    /**
+     * returns the width in dp of the legend forms line
+     *
+     * @return
+     */
+    public float getFormLineWidth() {
+        return mFormLineWidth;
+    }
     /**
      * returns the space between the legend entries on a horizontal axis in
      * pixels

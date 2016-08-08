@@ -434,7 +434,7 @@ public class LegendRenderer extends Renderer {
             return;
 
         mLegendFormPaint.setColor(legend.getColors()[index]);
-
+        mLegendFormPaint.setStrokeWidth(legend.getFormLineWidth());
         float formsize = legend.getFormSize();
         float half = formsize / 2f;
 
