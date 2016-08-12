@@ -41,7 +41,7 @@ public class PercentFormatter implements IValueFormatter, IAxisValueFormatter
     @Override
     public String getFormattedValue(int index, float value, AxisBase axis) {
         // TODO: Find a better way to do this.  Float isn't the best key...
-        return mFormat.format(index, value) + " %";
+        return mFormat.format(value) + " %";
     }
 
     @Override

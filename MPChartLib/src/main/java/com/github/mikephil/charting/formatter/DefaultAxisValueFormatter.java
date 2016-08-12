@@ -43,7 +43,7 @@ public class DefaultAxisValueFormatter implements IAxisValueFormatter
     public String getFormattedValue(int index, float value, AxisBase axis) {
 
         // TODO: There should be a better way to do this.  Floats are not the best keys...
-        return mFormat.format(index, value);
+        return mFormat.format(value);
 
     }
 
