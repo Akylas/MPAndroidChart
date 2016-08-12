@@ -11,6 +11,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.components.YAxis.AxisDependency;
 import com.github.mikephil.charting.data.RadarData;
 import com.github.mikephil.charting.highlight.RadarHighlighter;
+import com.github.mikephil.charting.interfaces.datasets.IRadarDataSet;
 import com.github.mikephil.charting.renderer.RadarChartRenderer;
 import com.github.mikephil.charting.renderer.XAxisRendererRadarChart;
 import com.github.mikephil.charting.renderer.YAxisRendererRadarChart;
@@ -100,7 +101,8 @@ public class RadarChart extends PieRadarChartBase<RadarData> {
         super.calcMinMax();
 
         mYAxis.calculate(mData.getYMin(AxisDependency.LEFT), mData.getYMax(AxisDependency.LEFT));
-        mXAxis.calculate(0, mData.getMaxEntryCountSet().getEntryCount());
+        
+        mXAxis.calculate(0, getMaxEntryCountSetCount());
     }
 
     @Override
@@ -171,7 +173,15 @@ public class RadarChart extends PieRadarChartBase<RadarData> {
      * @return
      */
     public float getSliceAngle() {
-        return 360f / (float) mData.getMaxEntryCountSet().getEntryCount();
+        return 360f / (float) getMaxEntryCountSetCount();
+    }
+    
+    public int getMaxEntryCountSetCount() {
+        IRadarDataSet set = mData.getMaxEntryCountSet();
+        if (set != null) {
+            return set.getEntryCount();
+        }
+        return 0;
     }
 
     @Override
@@ -182,7 +192,7 @@ public class RadarChart extends PieRadarChartBase<RadarData> {
 
         float sliceangle = getSliceAngle();
 
-        int max = mData.getMaxEntryCountSet().getEntryCount();
+        int max = getMaxEntryCountSetCount();
 
         int index = 0;
 
