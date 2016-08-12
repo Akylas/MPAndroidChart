@@ -11,6 +11,10 @@ public class PieEntry extends Entry {
 
     private String label;
 
+    public PieEntry() {
+        super();
+    }
+    
     public PieEntry(float value) {
         super(0f, value);
     }
