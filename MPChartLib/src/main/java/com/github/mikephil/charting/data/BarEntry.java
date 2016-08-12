@@ -31,7 +31,14 @@ public class BarEntry extends Entry {
      * the sum of all positive values this entry (if stacked) contains
      */
     private float mPositiveSum;
-
+    
+    /**
+     * Constructor
+     */
+    public BarEntry() {
+        super();
+    }
+    
     /**
      * Constructor for stacked bar entries.
      *
