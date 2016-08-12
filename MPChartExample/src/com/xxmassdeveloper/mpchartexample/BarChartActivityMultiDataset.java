@@ -21,7 +21,7 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.formatter.AxisValueFormatter;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
@@ -70,9 +70,8 @@ public class BarChartActivityMultiDataset extends DemoBase implements OnSeekBarC
         // create a custom MarkerView (extend MarkerView) and specify the layout
         // to use for it
         MyMarkerView mv = new MyMarkerView(this, R.layout.custom_marker_view);
-
-        // set the marker to the chart
-        mChart.setMarkerView(mv);
+        mv.setChartView(mChart); // For bounds control
+        mChart.setMarker(mv); // Set the marker to the chart
 
         mSeekBarX.setProgress(10);
         mSeekBarY.setProgress(100);
@@ -88,7 +87,7 @@ public class BarChartActivityMultiDataset extends DemoBase implements OnSeekBarC
         xl.setTypeface(mTfLight);
         xl.setGranularity(1f);
         xl.setCenterAxisLabels(true);
-        xl.setValueFormatter(new AxisValueFormatter() {
+        xl.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
                 return String.valueOf((int) value);
@@ -105,7 +104,7 @@ public class BarChartActivityMultiDataset extends DemoBase implements OnSeekBarC
         leftAxis.setValueFormatter(new LargeValueFormatter());
         leftAxis.setDrawGridLines(false);
         leftAxis.setSpaceTop(30f);
-        leftAxis.setAxisMinValue(0f); // this replaces setStartAtZero(true)
+        leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 
         mChart.getAxisRight().setEnabled(false);
     }
@@ -250,8 +249,8 @@ public class BarChartActivityMultiDataset extends DemoBase implements OnSeekBarC
         }
 
         mChart.getBarData().setBarWidth(barWidth);
-        mChart.getXAxis().setAxisMinValue(startYear);
-        mChart.getXAxis().setAxisMaxValue(mChart.getBarData().getGroupWidth(groupSpace, barSpace) * mSeekBarX.getProgress() + startYear);
+        mChart.getXAxis().setAxisMinimum(startYear);
+        mChart.getXAxis().setAxisMaximum(mChart.getBarData().getGroupWidth(groupSpace, barSpace) * mSeekBarX.getProgress() + startYear);
         mChart.groupBars(startYear, groupSpace, barSpace);
         mChart.invalidate();
     }

@@ -20,9 +20,8 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.formatter.FormattedStringCache;
-import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.formatter.AxisValueFormatter;
+import com.github.mikephil.charting.formatter.IValueFormatter;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
@@ -60,8 +59,8 @@ public class StackedBarActivityNegative extends DemoBase implements
         mChart.setHighlightFullBarEnabled(false);
         
         mChart.getAxisLeft().setEnabled(false);
-        mChart.getAxisRight().setAxisMaxValue(25f);
-        mChart.getAxisRight().setAxisMinValue(-25f);
+        mChart.getAxisRight().setAxisMaximum(25f);
+        mChart.getAxisRight().setAxisMinimum(-25f);
         mChart.getAxisRight().setDrawGridLines(false);
         mChart.getAxisRight().setDrawZeroLine(true);
         mChart.getAxisRight().setLabelCount(7, false);
@@ -73,18 +72,18 @@ public class StackedBarActivityNegative extends DemoBase implements
         xAxis.setDrawGridLines(false);
         xAxis.setDrawAxisLine(false);
         xAxis.setTextSize(9f);
-        xAxis.setAxisMinValue(0f);
-        xAxis.setAxisMaxValue(110f);
+        xAxis.setAxisMinimum(0f);
+        xAxis.setAxisMaximum(110f);
         xAxis.setCenterAxisLabels(true);
         xAxis.setLabelCount(12);
         xAxis.setGranularity(10f);
-        xAxis.setValueFormatter(new AxisValueFormatter() {
+        xAxis.setValueFormatter(new IAxisValueFormatter() {
 
-            private FormattedStringCache.PrimFloat format = new FormattedStringCache.PrimFloat(new DecimalFormat("###"));
+            private DecimalFormat format = new DecimalFormat("###");
 
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return format.getFormattedValue(value) + "-" + format.getFormattedValue(value+10);
+                return format.format(value) + "-" + format.format(value + 10);
             }
 
             @Override
@@ -221,27 +220,25 @@ public class StackedBarActivityNegative extends DemoBase implements
         Log.i("NOTING SELECTED", "");
     }
 
-    private class CustomFormatter implements ValueFormatter, AxisValueFormatter {
+    private class CustomFormatter implements IValueFormatter, IAxisValueFormatter
+    {
 
-        private FormattedStringCache.Generic<Integer, Float> mFormatValue;
-        private FormattedStringCache.PrimFloat mFormatAxis;
+        private DecimalFormat mFormat;
 
         public CustomFormatter() {
-            mFormatValue = new FormattedStringCache.Generic<>(new DecimalFormat("###"));
-            mFormatAxis = new FormattedStringCache.PrimFloat(new DecimalFormat("###"));
+            mFormat = new DecimalFormat("###");
         }
 
         // data
         @Override
         public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-            return mFormatValue.getFormattedValue(value, dataSetIndex) + "m";
+            return mFormat.format(Math.abs(value)) + "m";
         }
 
         // YAxis
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
-            Float v = Math.abs(value);
-            return mFormatAxis.getFormattedValue(v) + "m";
+            return mFormat.format(Math.abs(value)) + "m";
         }
 
         @Override

@@ -14,7 +14,8 @@ import java.util.List;
 /**
  * Created by Philipp Jahoda on 21/07/15.
  */
-public class ChartHighlighter<T extends BarLineScatterCandleBubbleDataProvider> implements Highlighter {
+public class ChartHighlighter<T extends BarLineScatterCandleBubbleDataProvider> implements IHighlighter
+{
 
     /**
      * instance of the data-provider
@@ -66,7 +67,7 @@ public class ChartHighlighter<T extends BarLineScatterCandleBubbleDataProvider> 
      */
     protected Highlight getHighlightForX(float xVal, float x, float y) {
 
-        List<Highlight> closestValues = getHighlightsAtXPos(xVal, x, y);
+        List<Highlight> closestValues = getHighlightsAtXValue(xVal, x, y);
 
         if(closestValues.isEmpty()) {
             return null;
@@ -124,7 +125,7 @@ public class ChartHighlighter<T extends BarLineScatterCandleBubbleDataProvider> 
      * @param y    touch position
      * @return
      */
-    protected List<Highlight> getHighlightsAtXPos(float xVal, float x, float y) {
+    protected List<Highlight> getHighlightsAtXValue(float xVal, float x, float y) {
 
         mHighlightBuffer.clear();
 
@@ -162,12 +163,12 @@ public class ChartHighlighter<T extends BarLineScatterCandleBubbleDataProvider> 
      */
     protected Highlight buildHighlight(IDataSet set, int dataSetIndex, float xVal, DataSet.Rounding rounding) {
 
-        final Entry e = set.getEntryForXPos(xVal, rounding);
+        final Entry e = set.getEntryForXValue(xVal, rounding);
 
         if (e == null)
             return null;
 
-        MPPointD pixels = mChart.getTransformer(set.getAxisDependency()).getPixelsForValues(e.getX(), e.getY());
+        MPPointD pixels = mChart.getTransformer(set.getAxisDependency()).getPixelForValues(e.getX(), e.getY());
 
         return new Highlight(e.getX(), e.getY(), (float) pixels.x, (float) pixels.y, dataSetIndex, set.getAxisDependency());
     }

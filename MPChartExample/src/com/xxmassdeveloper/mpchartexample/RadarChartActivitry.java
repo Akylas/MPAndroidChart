@@ -20,7 +20,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.RadarData;
 import com.github.mikephil.charting.data.RadarDataSet;
 import com.github.mikephil.charting.data.RadarEntry;
-import com.github.mikephil.charting.formatter.AxisValueFormatter;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IRadarDataSet;
 import com.xxmassdeveloper.mpchartexample.custom.RadarMarkerView;
@@ -58,9 +58,8 @@ public class RadarChartActivitry extends DemoBase {
         // create a custom MarkerView (extend MarkerView) and specify the layout
         // to use for it
         MarkerView mv = new RadarMarkerView(this, R.layout.radar_markerview);
-
-        // set the marker to the chart
-        mChart.setMarkerView(mv);
+        mv.setChartView(mChart); // For bounds control
+        mChart.setMarker(mv); // Set the marker to the chart
 
         setData();
 
@@ -74,7 +73,7 @@ public class RadarChartActivitry extends DemoBase {
         xAxis.setTextSize(9f);
         xAxis.setYOffset(0f);
         xAxis.setXOffset(0f);
-        xAxis.setValueFormatter(new AxisValueFormatter() {
+        xAxis.setValueFormatter(new IAxisValueFormatter() {
 
             private String[] mActivities = new String[]{"Burger", "Steak", "Salad", "Pasta", "Pizza"};
 
@@ -94,8 +93,8 @@ public class RadarChartActivitry extends DemoBase {
         yAxis.setTypeface(mTfLight);
         yAxis.setLabelCount(5, false);
         yAxis.setTextSize(9f);
-        yAxis.setAxisMinValue(0f);
-        yAxis.setAxisMaxValue(80f);
+        yAxis.setAxisMinimum(0f);
+        yAxis.setAxisMaximum(80f);
         yAxis.setDrawLabels(false);
 
         Legend l = mChart.getLegend();

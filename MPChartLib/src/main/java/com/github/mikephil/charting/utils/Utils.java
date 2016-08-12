@@ -18,6 +18,9 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 
+import com.github.mikephil.charting.formatter.DefaultValueFormatter;
+import com.github.mikephil.charting.formatter.IValueFormatter;
+
 import java.util.List;
 
 /**
@@ -35,6 +38,12 @@ public abstract class Utils {
     private static int mMaximumFlingVelocity = 8000;
     public final static double DEG2RAD = (Math.PI / 180.0);
     public final static float FDEG2RAD = ((float) Math.PI / 180.f);
+
+    @SuppressWarnings("unused")
+    public final static double DOUBLE_EPSILON = Double.longBitsToDouble(Double.doubleToLongBits(1.0) + 1);
+
+    @SuppressWarnings("unused")
+    public final static float FLOAT_EPSILON = Float.intBitsToFloat(Float.floatToIntBits(1f) + 1);
 
     /**
      * initialize method, called inside the Chart.init() method.
@@ -226,6 +235,19 @@ public abstract class Utils {
     private static final int POW_10[] = {
             1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000
     };
+
+    private static IValueFormatter mDefaultValueFormatter = generateDefaultValueFormatter();
+
+    private static IValueFormatter generateDefaultValueFormatter() {
+        final DefaultValueFormatter formatter = new DefaultValueFormatter(1);
+        return formatter;
+    }
+
+    /// - returns: The default value formatter used for all chart components that needs a default
+    public static IValueFormatter getDefaultValueFormatter()
+    {
+        return mDefaultValueFormatter;
+    }
 
     /**
      * Formats the given number to the given number of decimals, and returns the

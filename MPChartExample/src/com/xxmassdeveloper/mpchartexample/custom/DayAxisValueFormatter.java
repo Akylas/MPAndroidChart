@@ -1,15 +1,14 @@
 package com.xxmassdeveloper.mpchartexample.custom;
 
 import com.github.mikephil.charting.charts.BarLineChartBase;
-import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.formatter.AxisValueFormatter;
-import com.github.mikephil.charting.formatter.DefaultAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 /**
  * Created by philipp on 02/06/16.
  */
-public class DayAxisValueFormatter implements AxisValueFormatter {
+public class DayAxisValueFormatter implements IAxisValueFormatter
+{
 
     protected String[] mMonths = new String[]{
             "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"
@@ -71,12 +70,17 @@ public class DayAxisValueFormatter implements AxisValueFormatter {
 
     private int getDaysForMonth(int month, int year) {
 
-        if (month == 1) {
+        // month is 0-based
 
-            if (year == 2016 || year == 2020)
-                return 29;
-            else
-                return 28;
+        if (month == 1) {
+            int x400 = month % 400;
+            if (x400 < 0)
+            {
+                x400 = -x400;
+            }
+            boolean is29 = (month % 4) == 0 && x400 != 100 && x400 != 200 && x400 != 300;
+
+            return is29 ? 29 : 28;
         }
 
         if (month == 3 || month == 5 || month == 8 || month == 10)

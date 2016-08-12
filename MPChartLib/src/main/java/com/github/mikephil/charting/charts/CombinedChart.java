@@ -40,9 +40,7 @@ public class CombinedChart extends BarLineChartBase<CombinedData> implements Com
      */
     private boolean mDrawBarShadow = false;
 
-    protected DrawOrder[] mDrawOrder = new DrawOrder[]{
-            DrawOrder.BAR, DrawOrder.BUBBLE, DrawOrder.LINE, DrawOrder.CANDLE, DrawOrder.SCATTER
-    };
+    protected DrawOrder[] mDrawOrder;
 
     /**
      * enum that allows to specify the order in which the different data objects
@@ -68,10 +66,17 @@ public class CombinedChart extends BarLineChartBase<CombinedData> implements Com
     protected void init() {
         super.init();
 
+        // Default values are not ready here yet
+        mDrawOrder = new DrawOrder[]{
+                DrawOrder.BAR, DrawOrder.BUBBLE, DrawOrder.LINE, DrawOrder.CANDLE, DrawOrder.SCATTER
+        };
+
         setHighlighter(new CombinedHighlighter(this, this));
 
         // Old default behaviour
         setHighlightFullBarEnabled(true);
+
+        mRenderer = new CombinedChartRenderer(this, mAnimator, mViewPortHandler);
     }
 
     @Override
@@ -81,11 +86,9 @@ public class CombinedChart extends BarLineChartBase<CombinedData> implements Com
 
     @Override
     public void setData(CombinedData data) {
-        mData = null;
-        mRenderer = null;
         super.setData(data);
         setHighlighter(new CombinedHighlighter(this, this));
-        mRenderer = new CombinedChartRenderer(this, mAnimator, mViewPortHandler);
+        ((CombinedChartRenderer)mRenderer).createRenderers();
         mRenderer.initBuffers();
     }
 

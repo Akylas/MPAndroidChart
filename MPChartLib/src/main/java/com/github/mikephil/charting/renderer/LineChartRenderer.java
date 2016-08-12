@@ -89,10 +89,7 @@ public class LineChartRenderer extends LineRadarRenderer {
 
         LineData lineData = mChart.getLineData();
 
-        ILineDataSet set;
-        int setCount = lineData.getDataSets().size();
-        for (int i = 0; i < setCount; i++) {
-            set = lineData.getDataSets().get(i);
+        for (ILineDataSet set : lineData.getDataSets()) {
 
             if (set.isVisible())
                 drawDataSet(c, set);
@@ -206,6 +203,8 @@ public class LineChartRenderer extends LineRadarRenderer {
             Entry prev = prevPrev;
             Entry cur = prev;
             Entry next = dataSet.getEntryForIndex(mXBounds.min + 1);
+
+            if (cur == null || next == null) return;
 
             // let the spline start
             cubicPath.moveTo(cur.getX(), cur.getY() * phaseY);
@@ -667,12 +666,12 @@ public class LineChartRenderer extends LineRadarRenderer {
             if (set == null || !set.isHighlightEnabled())
                 continue;
 
-            Entry e = set.getEntryForXPos(high.getX());
+            Entry e = set.getEntryForXValue(high.getX());
 
             if (!isInBoundsX(e, set))
                 continue;
 
-            MPPointD pix = mChart.getTransformer(set.getAxisDependency()).getPixelsForValues(e.getX(), e.getY() * mAnimator
+            MPPointD pix = mChart.getTransformer(set.getAxisDependency()).getPixelForValues(e.getX(), e.getY() * mAnimator
                     .getPhaseY());
 
             high.setDraw((float) pix.x, (float) pix.y);

@@ -2,8 +2,6 @@
 package com.xxmassdeveloper.mpchartexample;
 
 import android.annotation.SuppressLint;
-import android.graphics.PointF;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,7 +26,7 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.formatter.AxisValueFormatter;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
@@ -80,7 +78,7 @@ public class BarChartActivity extends DemoBase implements OnSeekBarChangeListene
         mChart.setDrawGridBackground(false);
         // mChart.setDrawYLabels(false);
 
-        AxisValueFormatter xAxisFormatter = new DayAxisValueFormatter(mChart);
+        IAxisValueFormatter xAxisFormatter = new DayAxisValueFormatter(mChart);
 
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxisPosition.BOTTOM);
@@ -90,7 +88,7 @@ public class BarChartActivity extends DemoBase implements OnSeekBarChangeListene
         xAxis.setLabelCount(7);
         xAxis.setValueFormatter(xAxisFormatter);
 
-        AxisValueFormatter custom = new MyAxisValueFormatter();
+        IAxisValueFormatter custom = new MyAxisValueFormatter();
 
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setTypeface(mTfLight);
@@ -98,7 +96,7 @@ public class BarChartActivity extends DemoBase implements OnSeekBarChangeListene
         leftAxis.setValueFormatter(custom);
         leftAxis.setPosition(YAxisLabelPosition.OUTSIDE_CHART);
         leftAxis.setSpaceTop(15f);
-        leftAxis.setAxisMinValue(0f); // this replaces setStartAtZero(true)
+        leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setDrawGridLines(false);
@@ -106,7 +104,7 @@ public class BarChartActivity extends DemoBase implements OnSeekBarChangeListene
         rightAxis.setLabelCount(8, false);
         rightAxis.setValueFormatter(custom);
         rightAxis.setSpaceTop(15f);
-        rightAxis.setAxisMinValue(0f); // this replaces setStartAtZero(true)
+        rightAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 
         Legend l = mChart.getLegend();
         l.setPosition(LegendPosition.BELOW_CHART_LEFT);
@@ -119,7 +117,9 @@ public class BarChartActivity extends DemoBase implements OnSeekBarChangeListene
         // l.setCustom(ColorTemplate.VORDIPLOM_COLORS, new String[] { "abc",
         // "def", "ghj", "ikl", "mno" });
 
-        mChart.setMarkerView(new XYMarkerView(this, xAxisFormatter));
+        XYMarkerView mv = new XYMarkerView(this, xAxisFormatter);
+        mv.setChartView(mChart); // For bounds control
+        mChart.setMarker(mv); // Set the marker to the chart
 
         setData(12, 50);
 
@@ -228,8 +228,8 @@ public class BarChartActivity extends DemoBase implements OnSeekBarChangeListene
 
         float start = 0f;
 
-        mChart.getXAxis().setAxisMinValue(start);
-        mChart.getXAxis().setAxisMaxValue(start + count + 2);
+        mChart.getXAxis().setAxisMinimum(start);
+        mChart.getXAxis().setAxisMaximum(start + count + 2);
 
         ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
 

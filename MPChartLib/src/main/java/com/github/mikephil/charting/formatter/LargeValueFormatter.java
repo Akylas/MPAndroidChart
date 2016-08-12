@@ -17,22 +17,18 @@ import java.text.DecimalFormat;
  * @author Philipp Jahoda
  * @author Oleksandr Tyshkovets <olexandr.tyshkovets@gmail.com>
  */
-public class LargeValueFormatter implements ValueFormatter, AxisValueFormatter {
+public class LargeValueFormatter implements IValueFormatter, IAxisValueFormatter
+{
 
     private static String[] SUFFIX = new String[]{
             "", "k", "m", "b", "t"
     };
     private static final int MAX_LENGTH = 5;
+    private DecimalFormat mFormat;
     private String mText = "";
 
-
-    /**
-     * FormattedStringCache for formatting and caching.
-     */
-    protected FormattedStringCache.PrimDouble mFormattedStringCache;
-
     public LargeValueFormatter() {
-        mFormattedStringCache = new FormattedStringCache.PrimDouble(new DecimalFormat("###E00"));
+        mFormat = new DecimalFormat("###E00");
     }
 
     /**
@@ -45,13 +41,13 @@ public class LargeValueFormatter implements ValueFormatter, AxisValueFormatter {
         mText = appendix;
     }
 
-    // ValueFormatter
+    // IValueFormatter
     @Override
     public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
         return makePretty(value) + mText;
     }
 
-    // AxisValueFormatter
+    // IAxisValueFormatter
     @Override
     public String getFormattedValue(int index, float value, AxisBase axis) {
         return makePretty(value) + mText;
@@ -82,8 +78,7 @@ public class LargeValueFormatter implements ValueFormatter, AxisValueFormatter {
      */
     private String makePretty(double number) {
 
-        // TODO : Should be better way to do this.  Double isn't the best key...
-        String r = mFormattedStringCache.getFormattedValue(number);
+        String r = mFormat.format(number);
 
         int numericValue1 = Character.getNumericValue(r.charAt(r.length() - 1));
         int numericValue2 = Character.getNumericValue(r.charAt(r.length() - 2));

@@ -8,19 +8,18 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 import java.text.DecimalFormat;
 
 /**
- * This ValueFormatter is just for convenience and simply puts a "%" sign after
+ * This IValueFormatter is just for convenience and simply puts a "%" sign after
  * each value. (Recommeded for PieChart)
  *
  * @author Philipp Jahoda
  */
-public class PercentFormatter implements ValueFormatter, AxisValueFormatter {
+public class PercentFormatter implements IValueFormatter, IAxisValueFormatter
+{
 
-    protected FormattedStringCache.Generic<Integer, Float> mFormattedStringCache;
-    protected FormattedStringCache.PrimFloat mFormattedStringCacheAxis;
+    protected DecimalFormat mFormat;
 
     public PercentFormatter() {
-        mFormattedStringCache = new FormattedStringCache.Generic<>(new DecimalFormat("###,###,##0.0"));
-        mFormattedStringCacheAxis = new FormattedStringCache.PrimFloat(new DecimalFormat("###,###,##0.0"));
+        mFormat = new DecimalFormat("###,###,##0.0");
     }
 
     /**
@@ -29,21 +28,20 @@ public class PercentFormatter implements ValueFormatter, AxisValueFormatter {
      * @param format
      */
     public PercentFormatter(DecimalFormat format) {
-        mFormattedStringCache = new FormattedStringCache.Generic<>(format);
-        mFormattedStringCacheAxis = new FormattedStringCache.PrimFloat(format);
+        this.mFormat = format;
     }
 
-    // ValueFormatter
+    // IValueFormatter
     @Override
     public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-        return mFormattedStringCache.getFormattedValue(value, dataSetIndex) + " %";
+        return mFormat.format(value) + " %";
     }
 
-    // AxisValueFormatter
+    // IAxisValueFormatter
     @Override
     public String getFormattedValue(int index, float value, AxisBase axis) {
         // TODO: Find a better way to do this.  Float isn't the best key...
-        return mFormattedStringCacheAxis.getFormattedValue(index, value) + " %";
+        return mFormat.format(index, value) + " %";
     }
 
     @Override

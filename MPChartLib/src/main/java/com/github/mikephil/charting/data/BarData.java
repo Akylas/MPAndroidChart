@@ -15,7 +15,7 @@ public class BarData extends BarLineScatterCandleBubbleData<IBarDataSet> {
     /**
      * the width of the bars on the x-axis, in values (not pixels)
      */
-    private float mBarWidth = 1f;
+    private float mBarWidth = 0.85f;
 
     public BarData() {
         super();
@@ -31,7 +31,7 @@ public class BarData extends BarLineScatterCandleBubbleData<IBarDataSet> {
 
     /**
      * Sets the width each bar should have on the x-axis (in values, not pixels).
-     * Default 1f
+     * Default 0.85f
      *
      * @param mBarWidth
      */
@@ -44,8 +44,8 @@ public class BarData extends BarLineScatterCandleBubbleData<IBarDataSet> {
     }
 
     /**
-     * Groups all BarDataSet objects this data object holds together by modifying the x-position of their entries.
-     * Previously set x-positions of entries will be overwritten. Leaves space between bars and groups as specified
+     * Groups all BarDataSet objects this data object holds together by modifying the x-value of their entries.
+     * Previously set x-values of entries will be overwritten. Leaves space between bars and groups as specified
      * by the parameters.
      * Do not forget to call notifyDataSetChanged() on your BarChart object after calling this method.
      *
@@ -74,10 +74,7 @@ public class BarData extends BarLineScatterCandleBubbleData<IBarDataSet> {
             float start = fromX;
             fromX += groupSpaceWidthHalf;
 
-            IBarDataSet set;
-            final int setCountJ = mDataSets.size();
-            for(int j = 0 ; j < setCountJ ; j++){
-                set = mDataSets.get(j);
+            for (IBarDataSet set : mDataSets) {
 
                 fromX += barSpaceHalf;
                 fromX += barWidthHalf;

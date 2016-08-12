@@ -7,12 +7,13 @@ import java.text.DecimalFormat;
 /**
  * Created by philipp on 02/06/16.
  */
-public class DefaultAxisValueFormatter implements AxisValueFormatter {
+public class DefaultAxisValueFormatter implements IAxisValueFormatter
+{
 
     /**
-     * FormattedStringFormat for formatting and caching
+     * decimalformat for formatting
      */
-    protected FormattedStringCache.PrimFloat mFormattedStringCache;
+    protected DecimalFormat mFormat;
 
     /**
      * the number of decimal digits this formatter uses
@@ -35,14 +36,14 @@ public class DefaultAxisValueFormatter implements AxisValueFormatter {
             b.append("0");
         }
 
-        mFormattedStringCache = new FormattedStringCache.PrimFloat(new DecimalFormat("###,###,###,##0" + b.toString()));
+        mFormat = new DecimalFormat("###,###,###,##0" + b.toString());
     }
 
     @Override
     public String getFormattedValue(int index, float value, AxisBase axis) {
 
         // TODO: There should be a better way to do this.  Floats are not the best keys...
-        return mFormattedStringCache.getFormattedValue(index, value);
+        return mFormat.format(index, value);
 
     }
 

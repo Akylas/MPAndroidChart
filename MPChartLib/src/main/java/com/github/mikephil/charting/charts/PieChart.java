@@ -328,7 +328,7 @@ public class PieChart extends PieRadarChartBase<PieData> {
         List<IPieDataSet> dataSets = mData.getDataSets();
 
         for (int i = 0; i < dataSets.size(); i++) {
-            if (dataSets.get(i).getEntryForXPos(xIndex) != null)
+            if (dataSets.get(i).getEntryForXValue(xIndex) != null)
                 return i;
         }
 
@@ -662,7 +662,7 @@ public class PieChart extends PieRadarChartBase<PieData> {
 
     /**
      * If this is enabled, values inside the PieChart are drawn in percent and
-     * not with their original value. Values provided for the ValueFormatter to
+     * not with their original value. Values provided for the IValueFormatter to
      * format are then provided in percent.
      *
      * @param enabled

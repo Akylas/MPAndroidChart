@@ -45,9 +45,9 @@ public class HorizontalBarHighlighter extends BarHighlighter {
 	@Override
 	protected Highlight buildHighlight(IDataSet set, int dataSetIndex, float xVal, DataSet.Rounding rounding) {
 
-		final Entry e = set.getEntryForXPos(xVal, rounding);
+		final Entry e = set.getEntryForXValue(xVal, rounding);
 
-		MPPointD pixels = mChart.getTransformer(set.getAxisDependency()).getPixelsForValues(e.getY(), e.getX());
+		MPPointD pixels = mChart.getTransformer(set.getAxisDependency()).getPixelForValues(e.getY(), e.getX());
 
 		return new Highlight(e.getX(), e.getY(), (float) pixels.x, (float) pixels.y, dataSetIndex, set.getAxisDependency());
 	}

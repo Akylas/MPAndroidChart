@@ -12,7 +12,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.FillFormatter;
+import com.github.mikephil.charting.formatter.IFillFormatter;
 import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.xxmassdeveloper.mpchartexample.notimportant.DemoBase;
@@ -51,8 +51,8 @@ public class FilledLineActivity extends DemoBase {
         xAxis.setEnabled(false);
 
         YAxis leftAxis = mChart.getAxisLeft();
-        leftAxis.setAxisMaxValue(900f);
-        leftAxis.setAxisMinValue(-250f);
+        leftAxis.setAxisMaximum(900f);
+        leftAxis.setAxisMinimum(-250f);
         leftAxis.setDrawAxisLine(false);
         leftAxis.setDrawZeroLine(false);
         leftAxis.setDrawGridLines(false);
@@ -109,7 +109,7 @@ public class FilledLineActivity extends DemoBase {
             set1.setFillColor(Color.WHITE);
             set1.setHighLightColor(Color.rgb(244, 117, 117));
             set1.setDrawCircleHole(false);
-            set1.setFillFormatter(new FillFormatter() {
+            set1.setFillFormatter(new IFillFormatter() {
                 @Override
                 public float getFillLinePosition(ILineDataSet dataSet, LineDataProvider dataProvider) {
                     return mChart.getAxisLeft().getAxisMinimum();
@@ -128,7 +128,7 @@ public class FilledLineActivity extends DemoBase {
             set2.setFillColor(Color.WHITE);
             set2.setDrawCircleHole(false);
             set2.setHighLightColor(Color.rgb(244, 117, 117));
-            set2.setFillFormatter(new FillFormatter() {
+            set2.setFillFormatter(new IFillFormatter() {
                 @Override
                 public float getFillLinePosition(ILineDataSet dataSet, LineDataProvider dataProvider) {
                     return mChart.getAxisLeft().getAxisMaximum();
