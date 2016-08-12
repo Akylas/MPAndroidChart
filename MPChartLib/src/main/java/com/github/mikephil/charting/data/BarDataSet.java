@@ -47,8 +47,8 @@ public class BarDataSet extends BarLineScatterCandleBubbleDataSet<BarEntry> impl
 
         mHighLightColor = Color.rgb(0, 0, 0);
 
-        calcStackSize(yVals);
-        calcEntryCountIncludingStacks(yVals);
+        calcStackSize(this.mValues);
+        calcEntryCountIncludingStacks(this.mValues);
     }
 
     @Override
