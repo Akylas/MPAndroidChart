@@ -52,7 +52,7 @@ public class MultiLineChartActivity extends DemoBase implements OnSeekBarChangeL
         mChart.setOnChartValueSelectedListener(this);
         
         mChart.setDrawGridBackground(false);
-        mChart.setDescription("");
+        mChart.getDescription().setEnabled(false);
         mChart.setDrawBorders(false);
 
         mChart.getAxisLeft().setEnabled(false);
@@ -75,7 +75,10 @@ public class MultiLineChartActivity extends DemoBase implements OnSeekBarChangeL
         mSeekBarY.setProgress(100);
 
         Legend l = mChart.getLegend();
-        l.setPosition(LegendPosition.RIGHT_OF_CHART);
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        l.setOrientation(Legend.LegendOrientation.VERTICAL);
+        l.setDrawInside(false);
     }
 
     @Override

@@ -47,7 +47,11 @@ public class DefaultAxisValueFormatter implements IAxisValueFormatter
 
     }
 
-    @Override
+    /**
+     * Returns the number of decimal digits this formatter uses or -1, if unspecified.
+     *
+     * @return
+     */
     public int getDecimalDigits() {
         return digits;
     }

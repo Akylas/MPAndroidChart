@@ -19,12 +19,12 @@ public abstract class ComponentBase {
     protected boolean mEnabled = true;
 
     /**
-     * the offset in pixels this axis labels have on the x-axis
+     * the offset in pixels this component has on the x-axis
      */
     protected float mXOffset = 5f;
 
     /**
-     * the offset in pixels this axis labels have on the Y-axis
+     * the offset in pixels this component has on the Y-axis
      */
     protected float mYOffset = 5f;
 
@@ -107,10 +107,10 @@ public abstract class ComponentBase {
     }
 
     /**
-     * sets the size of the label text in pixels min = 6f, max = 24f, default
+     * sets the size of the label text in density pixels min = 6f, max = 24f, default
      * 10f
      *
-     * @param size
+     * @param size the text size, in DP
      */
     public void setTextSize(float size) {
 
@@ -123,7 +123,7 @@ public abstract class ComponentBase {
     }
 
     /**
-     * returns the text size that is currently set for the labels
+     * returns the text size that is currently set for the labels, in pixels
      *
      * @return
      */

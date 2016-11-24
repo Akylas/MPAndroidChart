@@ -2,6 +2,7 @@
 package com.xxmassdeveloper.mpchartexample;
 
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -71,8 +72,7 @@ public class LineChartActivity1 extends DemoBase implements OnSeekBarChangeListe
         mChart.setDrawGridBackground(false);
 
         // no description text
-        mChart.setDescription("");
-        mChart.setNoDataTextDescription("You need to provide data for the chart.");
+        mChart.getDescription().setEnabled(false);
 
         // enable touch gestures
         mChart.setTouchEnabled(true);
@@ -156,7 +156,6 @@ public class LineChartActivity1 extends DemoBase implements OnSeekBarChangeListe
         Legend l = mChart.getLegend();
 
         // modify the legend ...
-        // l.setPosition(LegendPosition.LEFT_OF_CHART);
         l.setForm(LegendForm.LINE);
 
         // // dont forget to refresh the drawing
@@ -368,6 +367,9 @@ public class LineChartActivity1 extends DemoBase implements OnSeekBarChangeListe
             set1.setDrawCircleHole(false);
             set1.setValueTextSize(9f);
             set1.setDrawFilled(true);
+            set1.setFormLineWidth(1f);
+            set1.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
+            set1.setFormSize(15.f);
 
             if (Utils.getSDKInt() >= 18) {
                 // fill drawable only supported on api level 18 and above

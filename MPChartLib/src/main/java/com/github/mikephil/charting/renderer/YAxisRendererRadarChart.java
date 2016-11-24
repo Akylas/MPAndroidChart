@@ -32,8 +32,9 @@ public class YAxisRendererRadarChart extends YAxisRenderer {
         int labelCount = mAxis.getLabelCount();
         double range = Math.abs(yMax - yMin);
 
-        if (labelCount == 0 || range <= 0) {
+        if (labelCount == 0 || range <= 0 || Double.isInfinite(range)) {
             mAxis.mEntries = new float[]{};
+            mAxis.mCenteredEntries = new float[]{};
             mAxis.mEntryCount = 0;
             return;
         }

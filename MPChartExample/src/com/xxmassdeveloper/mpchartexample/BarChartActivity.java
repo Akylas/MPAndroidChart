@@ -66,7 +66,7 @@ public class BarChartActivity extends DemoBase implements OnSeekBarChangeListene
         mChart.setDrawBarShadow(false);
         mChart.setDrawValueAboveBar(true);
 
-        mChart.setDescription("");
+        mChart.getDescription().setEnabled(false);
 
         // if more than 60 entries are displayed in the chart, no values will be
         // drawn
@@ -107,7 +107,10 @@ public class BarChartActivity extends DemoBase implements OnSeekBarChangeListene
         rightAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 
         Legend l = mChart.getLegend();
-        l.setPosition(LegendPosition.BELOW_CHART_LEFT);
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        l.setDrawInside(false);
         l.setForm(LegendForm.SQUARE);
         l.setFormSize(9f);
         l.setTextSize(11f);
@@ -226,17 +229,14 @@ public class BarChartActivity extends DemoBase implements OnSeekBarChangeListene
 
     private void setData(int count, float range) {
 
-        float start = 0f;
-
-        mChart.getXAxis().setAxisMinimum(start);
-        mChart.getXAxis().setAxisMaximum(start + count + 2);
+        float start = 1f;
 
         ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
 
         for (int i = (int) start; i < start + count + 1; i++) {
             float mult = (range + 1);
             float val = (float) (Math.random() * mult);
-            yVals1.add(new BarEntry(i + 1f, val));
+            yVals1.add(new BarEntry(i, val));
         }
 
         BarDataSet set1;

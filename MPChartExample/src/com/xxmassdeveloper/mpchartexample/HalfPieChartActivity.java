@@ -43,7 +43,7 @@ public class HalfPieChartActivity extends DemoBase {
         moveOffScreen();
 
         mChart.setUsePercentValues(true);
-        mChart.setDescription("");
+        mChart.getDescription().setEnabled(false);
 
         mChart.setCenterTextTypeface(mTfLight);
         mChart.setCenterText(generateCenterSpannableText());
@@ -71,7 +71,10 @@ public class HalfPieChartActivity extends DemoBase {
         mChart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
 
         Legend l = mChart.getLegend();
-        l.setPosition(LegendPosition.ABOVE_CHART_CENTER);
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        l.setDrawInside(false);
         l.setXEntrySpace(7f);
         l.setYEntrySpace(0f);
         l.setYOffset(0f);

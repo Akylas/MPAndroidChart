@@ -56,8 +56,6 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
      * flag that indicates if auto scaling on the y axis is enabled
      */
     protected boolean mAutoScaleMinMaxEnabled = false;
-    private Float mAutoScaleLastLowestVisibleXIndex = null;
-    private Float mAutoScaleLastHighestVisibleXIndex = null;
 
     /**
      * flag that indicates if pinch-zoom is enabled. if true, both x and y axis
@@ -98,6 +96,8 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
     protected boolean mDrawGridBackground = false;
 
     protected boolean mDrawBorders = false;
+
+    protected boolean mClipValuesToContent = false;
 
     /**
      * Sets the minimum offset (padding) around the chart, defaults to 15
@@ -206,26 +206,8 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
         mAxisRendererRight.renderAxisLine(canvas);
 
         if (mAutoScaleMinMaxEnabled) {
-            final float lowestVisibleXIndex = getLowestVisibleX();
-            final float highestVisibleXIndex = getHighestVisibleX();
-
-            if (mAutoScaleLastLowestVisibleXIndex == null ||
-                    mAutoScaleLastLowestVisibleXIndex != lowestVisibleXIndex ||
-                    mAutoScaleLastHighestVisibleXIndex == null ||
-                    mAutoScaleLastHighestVisibleXIndex != highestVisibleXIndex) {
-
-                calcMinMax();
-                calculateOffsets();
-
-                mAutoScaleLastLowestVisibleXIndex = lowestVisibleXIndex;
-                mAutoScaleLastHighestVisibleXIndex = highestVisibleXIndex;
-            }
+            autoScale();
         }
-
-        // make sure the graph values and grid cannot be drawn outside the
-        // content-rect
-        int clipRestoreCount = canvas.save();
-        canvas.clipRect(mViewPortHandler.getContentRect());
 
         mXAxisRenderer.renderGridLines(canvas);
         mAxisRendererLeft.renderGridLines(canvas);
@@ -240,6 +222,10 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
         if (mAxisRight.isDrawLimitLinesBehindDataEnabled())
             mAxisRendererRight.renderLimitLines(canvas);
 
+        // make sure the data cannot be drawn outside the content-rect
+        int clipRestoreCount = canvas.save();
+        canvas.clipRect(mViewPortHandler.getContentRect());
+
         mRenderer.drawData(canvas);
 
         // if highlighting is enabled
@@ -251,9 +237,6 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
 
         mRenderer.drawExtras(canvas);
 
-        clipRestoreCount = canvas.save();
-        canvas.clipRect(mViewPortHandler.getContentRect());
-
         if (!mXAxis.isDrawLimitLinesBehindDataEnabled())
             mXAxisRenderer.renderLimitLines(canvas);
 
@@ -263,19 +246,26 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
         if (!mAxisRight.isDrawLimitLinesBehindDataEnabled())
             mAxisRendererRight.renderLimitLines(canvas);
 
-        canvas.restoreToCount(clipRestoreCount);
-
         mXAxisRenderer.renderAxisLabels(canvas);
         mAxisRendererLeft.renderAxisLabels(canvas);
         mAxisRendererRight.renderAxisLabels(canvas);
 
-        mRenderer.drawValues(canvas);
+        if (isClipValuesToContentEnabled()) {
+            clipRestoreCount = canvas.save();
+            canvas.clipRect(mViewPortHandler.getContentRect());
+
+            mRenderer.drawValues(canvas);
+
+            canvas.restoreToCount(clipRestoreCount);
+        } else {
+            mRenderer.drawValues(canvas);
+        }
 
         mLegendRenderer.renderLegend(canvas);
 
-        drawMarkers(canvas);
-
         drawDescription(canvas);
+
+        drawMarkers(canvas);
 
         if (mLogEnabled) {
             long drawtime = (System.currentTimeMillis() - starttime);
@@ -344,11 +334,28 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
         calculateOffsets();
     }
 
+    /**
+     * Performs auto scaling of the axis by recalculating the minimum and maximum y-values based on the entries currently in view.
+     */
+    protected void autoScale() {
+
+        final float fromX = getLowestVisibleX();
+        final float toX = getHighestVisibleX();
+
+        mData.calcMinMaxY(fromX, toX);
+
+        mXAxis.calculate(mData.getXMin(), mData.getXMax());
+
+        // calculate axis range (min / max) according to provided data
+        mAxisLeft.calculate(mData.getYMin(AxisDependency.LEFT), mData.getYMax(AxisDependency.LEFT));
+        mAxisRight.calculate(mData.getYMin(AxisDependency.RIGHT), mData.getYMax(AxisDependency
+                .RIGHT));
+
+        calculateOffsets();
+    }
+
     @Override
     protected void calcMinMax() {
-
-        if (mAutoScaleMinMaxEnabled)
-            mData.calcMinMax();
 
         mXAxis.calculate(mData.getXMin(), mData.getXMax());
 
@@ -390,18 +397,12 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
                                     offsets.top += Math.min(mLegend.mNeededHeight,
                                             mViewPortHandler.getChartHeight() * mLegend.getMaxSizePercent())
                                             + mLegend.getYOffset();
-
-                                    if (getXAxis().isEnabled() && getXAxis().isDrawLabelsEnabled())
-                                        offsets.top += getXAxis().mLabelRotatedHeight;
                                     break;
 
                                 case BOTTOM:
                                     offsets.bottom += Math.min(mLegend.mNeededHeight,
                                             mViewPortHandler.getChartHeight() * mLegend.getMaxSizePercent())
                                             + mLegend.getYOffset();
-
-                                    if (getXAxis().isEnabled() && getXAxis().isDrawLabelsEnabled())
-                                        offsets.bottom += getXAxis().mLabelRotatedHeight;
                                     break;
 
                                 default:
@@ -1146,13 +1147,43 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
     }
 
     /**
-     * Sets drawing the borders rectangle to true. If this is enabled, there is
-     * no point drawing the axis-lines of x- and y-axis.
+     * When enabled, the borders rectangle will be rendered.
+     * If this is enabled, there is no point drawing the axis-lines of x- and y-axis.
      *
      * @param enabled
      */
     public void setDrawBorders(boolean enabled) {
         mDrawBorders = enabled;
+    }
+
+    /**
+     * When enabled, the borders rectangle will be rendered.
+     * If this is enabled, there is no point drawing the axis-lines of x- and y-axis.
+     *
+     * @return
+     */
+    public boolean isDrawBordersEnabled() {
+        return mDrawBorders;
+    }
+
+    /**
+     * When enabled, the values will be clipped to contentRect,
+     *   otherwise they can bleed outside the content rect.
+     *
+     * @param enabled
+     */
+    public void setClipValuesToContent(boolean enabled) {
+        mClipValuesToContent = enabled;
+    }
+
+    /**
+     * When enabled, the values will be clipped to contentRect,
+     *   otherwise they can bleed outside the content rect.
+     *
+     * @return
+     */
+    public boolean isClipValuesToContentEnabled() {
+        return mClipValuesToContent;
     }
 
     /**

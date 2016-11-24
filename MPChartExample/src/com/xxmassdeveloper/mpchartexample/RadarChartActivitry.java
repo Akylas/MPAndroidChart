@@ -47,7 +47,7 @@ public class RadarChartActivitry extends DemoBase {
         mChart = (RadarChart) findViewById(R.id.chart1);
         mChart.setBackgroundColor(Color.rgb(60, 65, 82));
 
-        mChart.setDescription("");
+        mChart.getDescription().setEnabled(false);
 
         mChart.setWebLineWidth(1f);
         mChart.setWebColor(Color.LTGRAY);
@@ -81,11 +81,6 @@ public class RadarChartActivitry extends DemoBase {
             public String getFormattedValue(float value, AxisBase axis) {
                 return mActivities[(int) value % mActivities.length];
             }
-
-            @Override
-            public int getDecimalDigits() {
-                return 0;
-            }
         });
         xAxis.setTextColor(Color.WHITE);
 
@@ -98,7 +93,10 @@ public class RadarChartActivitry extends DemoBase {
         yAxis.setDrawLabels(false);
 
         Legend l = mChart.getLegend();
-        l.setPosition(LegendPosition.ABOVE_CHART_CENTER);
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        l.setDrawInside(false);
         l.setTypeface(mTfLight);
         l.setXEntrySpace(7f);
         l.setYEntrySpace(5f);

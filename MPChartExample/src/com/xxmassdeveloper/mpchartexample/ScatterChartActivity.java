@@ -52,8 +52,7 @@ public class ScatterChartActivity extends DemoBase implements OnSeekBarChangeLis
         mSeekBarY.setOnSeekBarChangeListener(this);
 
         mChart = (ScatterChart) findViewById(R.id.chart1);
-        mChart.setDescription("");
-
+        mChart.getDescription().setEnabled(false);
         mChart.setOnChartValueSelectedListener(this);
 
         mChart.setDrawGridBackground(false);
@@ -71,7 +70,10 @@ public class ScatterChartActivity extends DemoBase implements OnSeekBarChangeLis
         mSeekBarY.setProgress(100);
 
         Legend l = mChart.getLegend();
-        l.setPosition(LegendPosition.RIGHT_OF_CHART);
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        l.setOrientation(Legend.LegendOrientation.VERTICAL);
+        l.setDrawInside(false);
         l.setTypeface(mTfLight);
         l.setXOffset(5f);
 

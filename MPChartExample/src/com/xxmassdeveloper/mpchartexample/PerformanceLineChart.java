@@ -42,8 +42,7 @@ public class PerformanceLineChart extends DemoBase implements OnSeekBarChangeLis
         mChart.setDrawGridBackground(false);
 
         // no description text
-        mChart.setDescription("");
-        mChart.setNoDataTextDescription("You need to provide data for the chart.");
+        mChart.getDescription().setEnabled(false);
 
         // enable touch gestures
         mChart.setTouchEnabled(true);

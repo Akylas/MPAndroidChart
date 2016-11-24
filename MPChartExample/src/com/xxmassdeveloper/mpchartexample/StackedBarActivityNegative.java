@@ -49,7 +49,7 @@ public class StackedBarActivityNegative extends DemoBase implements
         mChart = (HorizontalBarChart) findViewById(R.id.chart1);
         mChart.setOnChartValueSelectedListener(this);
         mChart.setDrawGridBackground(false);
-        mChart.setDescription("");
+        mChart.getDescription().setEnabled(false);
 
         // scaling can now only be done on x- and y-axis separately
         mChart.setPinchZoom(false);
@@ -85,15 +85,13 @@ public class StackedBarActivityNegative extends DemoBase implements
             public String getFormattedValue(float value, AxisBase axis) {
                 return format.format(value) + "-" + format.format(value + 10);
             }
-
-            @Override
-            public int getDecimalDigits() {
-                return 0;
-            }
         });
 
         Legend l = mChart.getLegend();
-        l.setPosition(LegendPosition.BELOW_CHART_RIGHT);
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        l.setDrawInside(false);
         l.setFormSize(8f);
         l.setFormToTextSpace(4f);
         l.setXEntrySpace(6f);
@@ -239,11 +237,6 @@ public class StackedBarActivityNegative extends DemoBase implements
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
             return mFormat.format(Math.abs(value)) + "m";
-        }
-
-        @Override
-        public int getDecimalDigits() {
-            return 0;
         }
     }
 }

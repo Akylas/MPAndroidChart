@@ -20,11 +20,4 @@ public interface IAxisValueFormatter
      * @return
      */
     String getFormattedValue(int index, float value, AxisBase axis);
-
-    /**
-     * Returns the number of decimal digits this formatter uses or -1, if unspecified.
-     *
-     * @return
-     */
-    int getDecimalDigits();
 }

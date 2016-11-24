@@ -57,7 +57,7 @@ public class PieChartActivity extends DemoBase implements OnSeekBarChangeListene
 
         mChart = (PieChart) findViewById(R.id.chart1);
         mChart.setUsePercentValues(true);
-        mChart.setDescription("");
+        mChart.getDescription().setEnabled(false);
         mChart.setExtraOffsets(5, 10, 5, 5);
 
         mChart.setDragDecelerationFrictionCoef(0.95f);
@@ -96,7 +96,10 @@ public class PieChartActivity extends DemoBase implements OnSeekBarChangeListene
         mSeekBarY.setOnSeekBarChangeListener(this);
 
         Legend l = mChart.getLegend();
-        l.setPosition(LegendPosition.RIGHT_OF_CHART);
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        l.setOrientation(Legend.LegendOrientation.VERTICAL);
+        l.setDrawInside(false);
         l.setXEntrySpace(7f);
         l.setYEntrySpace(0f);
         l.setYOffset(0f);

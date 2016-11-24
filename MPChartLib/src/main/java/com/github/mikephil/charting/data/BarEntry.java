@@ -49,8 +49,8 @@ public class BarEntry extends Entry {
         super(x, calcSum(vals));
 
         this.mYVals = vals;
-        calcRanges();
         calcPosNegSum();
+        calcRanges();
     }
 
     /**
@@ -74,8 +74,8 @@ public class BarEntry extends Entry {
         super(x, calcSum(vals), label);
 
         this.mYVals = vals;
-        calcRanges();
         calcPosNegSum();
+        calcRanges();
     }
 
     /**
@@ -149,7 +149,15 @@ public class BarEntry extends Entry {
         return mYVals != null;
     }
 
+    /**
+     * Use `getSumBelow(stackIndex)` instead.
+     */
+    @Deprecated
     public float getBelowSum(int stackIndex) {
+        return getSumBelow(stackIndex);
+    }
+
+    public float getSumBelow(int stackIndex) {
 
         if (mYVals == null)
             return 0;
@@ -241,8 +249,8 @@ public class BarEntry extends Entry {
             float value = values[i];
 
             if (value < 0) {
-                mRanges[i] = new Range(negRemain, negRemain + value);
-                negRemain += Math.abs(value);
+                mRanges[i] = new Range(negRemain, negRemain - value);
+                negRemain -= value;
             } else {
                 mRanges[i] = new Range(posRemain, posRemain + value);
                 posRemain += value;

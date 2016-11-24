@@ -60,7 +60,7 @@ public class HorizontalBarChartActivity extends DemoBase implements OnSeekBarCha
 
         mChart.setDrawValueAboveBar(true);
 
-        mChart.setDescription("");
+        mChart.getDescription().setEnabled(false);
 
         // if more than 60 entries are displayed in the chart, no values will be
         // drawn
@@ -107,7 +107,10 @@ public class HorizontalBarChartActivity extends DemoBase implements OnSeekBarCha
         mSeekBarX.setOnSeekBarChangeListener(this);
 
         Legend l = mChart.getLegend();
-        l.setPosition(LegendPosition.BELOW_CHART_LEFT);
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        l.setDrawInside(false);
         l.setFormSize(8f);
         l.setXEntrySpace(4f);
     }

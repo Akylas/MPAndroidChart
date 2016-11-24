@@ -2,8 +2,10 @@ package com.github.mikephil.charting.data;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Typeface;
 
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.formatter.DefaultValueFormatter;
 import com.github.mikephil.charting.formatter.IValueFormatter;
@@ -55,6 +57,11 @@ public abstract class BaseDataSet<T extends Entry> implements IDataSet<T> {
      * the typeface used for the value text
      */
     protected Typeface mValueTypeface;
+
+    private Legend.LegendForm mForm = Legend.LegendForm.DEFAULT;
+    private float mFormSize = Float.NaN;
+    private float mFormLineWidth = Float.NaN;
+    private DashPathEffect mFormLineDashEffect = null;
 
     /**
      * if true, y-values are drawn on the chart
@@ -318,6 +325,42 @@ public abstract class BaseDataSet<T extends Entry> implements IDataSet<T> {
         return mValueTextSize;
     }
 
+    public void setForm(Legend.LegendForm form) {
+        mForm = form;
+    }
+
+    @Override
+    public Legend.LegendForm getForm() {
+        return mForm;
+    }
+
+    public void setFormSize(float formSize) {
+        mFormSize = formSize;
+    }
+
+    @Override
+    public float getFormSize() {
+        return mFormSize;
+    }
+
+    public void setFormLineWidth(float formLineWidth) {
+        mFormLineWidth = formLineWidth;
+    }
+
+    @Override
+    public float getFormLineWidth() {
+        return mFormLineWidth;
+    }
+
+    public void setFormLineDashEffect(DashPathEffect dashPathEffect) {
+        mFormLineDashEffect = dashPathEffect;
+    }
+
+    @Override
+    public DashPathEffect getFormLineDashEffect() {
+        return mFormLineDashEffect;
+    }
+
     @Override
     public void setDrawValues(boolean enabled) {
         this.mDrawValues = enabled;
@@ -389,7 +432,7 @@ public abstract class BaseDataSet<T extends Entry> implements IDataSet<T> {
     @Override
     public boolean removeEntryByXValue(float xValue) {
 
-        T e = getEntryForXValue(xValue);
+        T e = getEntryForXValue(xValue, Float.NaN);
         return removeEntry(e);
     }
 

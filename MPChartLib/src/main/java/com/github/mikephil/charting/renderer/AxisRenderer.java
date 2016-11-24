@@ -154,8 +154,9 @@ public abstract class AxisRenderer extends Renderer {
         int labelCount = mAxis.getLabelCount();
         double range = Math.abs(yMax - yMin);
 
-        if (labelCount == 0 || range <= 0) {
+        if (labelCount == 0 || range <= 0 || Double.isInfinite(range)) {
             mAxis.mEntries = new float[]{};
+            mAxis.mCenteredEntries = new float[]{};
             mAxis.mEntryCount = 0;
             return;
         }
@@ -178,13 +179,12 @@ public abstract class AxisRenderer extends Renderer {
             interval = Math.floor(10 * intervalMagnitude);
         }
 
-        boolean centeringEnabled = mAxis.isCenterAxisLabelsEnabled();
-        int n = centeringEnabled ? 1 : 0;
+        int n = mAxis.isCenterAxisLabelsEnabled() ? 1 : 0;
 
         // force label count
         if (mAxis.isForceLabelsEnabled()) {
 
-            float step = (float) range / (float) (labelCount - 1);
+            interval = (float) range / (float) (labelCount - 1);
             mAxis.mEntryCount = labelCount;
 
             if (mAxis.mEntries.length < labelCount) {
@@ -196,23 +196,22 @@ public abstract class AxisRenderer extends Renderer {
 
             for (int i = 0; i < labelCount; i++) {
                 mAxis.mEntries[i] = v;
-                v += step;
+                v += interval;
             }
 
             n = labelCount;
 
             // no forced count
         } else {
-
-            if (mAxis.isShowOnlyMinMaxEnabled())
+			if (mAxis.isShowOnlyMinMaxEnabled())
             {
                 mAxis.mEntries = new float[] {yMin, yMax};
                 mAxis.mEntryCount = 2;
             } else {
-                double first = interval == 0.0 ? 0.0 : Math.ceil(yMin / interval) * interval;
-                if(centeringEnabled) {
-                    first -= interval;
-                }
+            	double first = interval == 0.0 ? 0.0 : Math.ceil(yMin / interval) * interval;
+            		if(mAxis.isCenterAxisLabelsEnabled()) {
+                	first -= interval;
+            	}
 
                 double last = interval == 0.0 ? 0.0 : Utils.nextUp(Math.floor(yMax / interval) * interval);
 
@@ -250,13 +249,13 @@ public abstract class AxisRenderer extends Renderer {
             mAxis.mDecimals = 0;
         }
 
-        if (centeringEnabled) {
+        if (mAxis.isCenterAxisLabelsEnabled()) {
 
             if (mAxis.mCenteredEntries.length < n) {
                 mAxis.mCenteredEntries = new float[n];
             }
 
-            float offset = (mAxis.mEntries[1] - mAxis.mEntries[0]) / 2f;
+            float offset = (float)interval / 2f;
 
             for (int i = 0; i < n; i++) {
                 mAxis.mCenteredEntries[i] = mAxis.mEntries[i] + offset;

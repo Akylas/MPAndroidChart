@@ -62,7 +62,7 @@ public class PiePolylineChartActivity extends DemoBase implements OnSeekBarChang
 
         mChart = (PieChart) findViewById(R.id.chart1);
         mChart.setUsePercentValues(true);
-        mChart.setDescription("");
+        mChart.getDescription().setEnabled(false);
         mChart.setExtraOffsets(5, 10, 5, 5);
 
         mChart.setDragDecelerationFrictionCoef(0.95f);
@@ -102,7 +102,10 @@ public class PiePolylineChartActivity extends DemoBase implements OnSeekBarChang
         // mChart.spin(2000, 0, 360);
 
         Legend l = mChart.getLegend();
-        l.setPosition(LegendPosition.RIGHT_OF_CHART);
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        l.setOrientation(Legend.LegendOrientation.VERTICAL);
+        l.setDrawInside(false);
         l.setEnabled(false);
     }
 
@@ -223,7 +226,7 @@ public class PiePolylineChartActivity extends DemoBase implements OnSeekBarChang
         dataSet.setValueLinePart1OffsetPercentage(80.f);
         dataSet.setValueLinePart1Length(0.2f);
         dataSet.setValueLinePart2Length(0.4f);
-        // dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        //dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
         dataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
 
         PieData data = new PieData(dataSet);

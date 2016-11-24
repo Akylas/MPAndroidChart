@@ -120,6 +120,16 @@ public abstract class AxisBase extends ComponentBase {
     protected boolean mDrawLimitLineBehindData = false;
 
     /**
+     * Extra spacing for `axisMinimum` to be added to automatically calculated `axisMinimum`
+     */
+    protected float mSpaceMin = 0.f;
+
+    /**
+     * Extra spacing for `axisMaximum` to be added to automatically calculated `axisMaximum`
+     */
+    protected float mSpaceMax = 0.f;
+
+    /**
      * flag indicating that the axis-min value has been customized
      */
     protected boolean mCustomAxisMin = false;
@@ -190,12 +200,18 @@ public abstract class AxisBase extends ComponentBase {
         return mDrawAxisLine;
     }
 
+    /**
+     * Centers the axis labels instead of drawing them at their original position.
+     * This is useful especially for grouped BarChart.
+     *
+     * @param enabled
+     */
     public void setCenterAxisLabels(boolean enabled) {
         mCenterAxisLabels = enabled;
     }
 
     public boolean isCenterAxisLabelsEnabled() {
-        return mCenterAxisLabels && mEntryCount > 1;
+        return mCenterAxisLabels && mEntryCount > 0;
     }
 
     /**
@@ -523,12 +539,10 @@ public abstract class AxisBase extends ComponentBase {
      */
     public IAxisValueFormatter getValueFormatter() {
 
-        if (mAxisValueFormatter == null) {
+        if (mAxisValueFormatter == null ||
+                (mAxisValueFormatter instanceof DefaultAxisValueFormatter &&
+                        ((DefaultAxisValueFormatter)mAxisValueFormatter).getDecimalDigits() != mDecimals))
             mAxisValueFormatter = new DefaultAxisValueFormatter(mDecimals);
-        } else if (mAxisValueFormatter.getDecimalDigits() != mDecimals && mAxisValueFormatter instanceof
-                DefaultAxisValueFormatter) {
-            mAxisValueFormatter = new DefaultAxisValueFormatter(mDecimals);
-        }
 
         return mAxisValueFormatter;
     }
@@ -547,13 +561,13 @@ public abstract class AxisBase extends ComponentBase {
                 lineLength, spaceLength
         }, phase);
     }
-    
+
     /**
      * Enables the grid line to be drawn in dashed mode, e.g. like this
      * "- - - - - -". THIS ONLY WORKS IF HARDWARE-ACCELERATION IS TURNED OFF.
      * Keep in mind that hardware acceleration boosts performance.
      *
-     * @param effect  the DashPathEffect
+     * @param effect the DashPathEffect
      */
     public void setGridDashedLine(DashPathEffect effect) {
         mGridDashPathEffect = effect;
@@ -583,7 +597,7 @@ public abstract class AxisBase extends ComponentBase {
     public DashPathEffect getGridDashPathEffect() {
         return mGridDashPathEffect;
     }
-    
+
 
     /**
      * Enables the axis line to be drawn in dashed mode, e.g. like this
@@ -599,13 +613,13 @@ public abstract class AxisBase extends ComponentBase {
                 lineLength, spaceLength
         }, phase);
     }
-    
+
     /**
      * Enables the axis line to be drawn in dashed mode, e.g. like this
      * "- - - - - -". THIS ONLY WORKS IF HARDWARE-ACCELERATION IS TURNED OFF.
      * Keep in mind that hardware acceleration boosts performance.
      *
-     * @param effect  the DashPathEffect
+     * @param effect the DashPathEffect
      */
     public void setAxisLineDashedLine(DashPathEffect effect) {
         mAxisLineDashPathEffect = effect;
@@ -742,8 +756,8 @@ public abstract class AxisBase extends ComponentBase {
     public void calculate(float dataMin, float dataMax) {
 
         // if custom, use value as is, else use data value
-        float min = mCustomAxisMin ? mAxisMinimum : dataMin;
-        float max = mCustomAxisMax ? mAxisMaximum : dataMax;
+        float min = mCustomAxisMin ? mAxisMinimum : (dataMin - mSpaceMin);
+        float max = mCustomAxisMax ? mAxisMaximum : (dataMax + mSpaceMax);
 
         // temporary range (before calculations)
         float range = Math.abs(max - min);
@@ -763,5 +777,37 @@ public abstract class AxisBase extends ComponentBase {
 
     public boolean isShowOnlyMinMaxEnabled() {
         return mShowOnlyMinMaxEnabled;
+    }
+
+    /**
+     * Gets extra spacing for `axisMinimum` to be added to automatically calculated `axisMinimum`
+     */
+    public float getSpaceMin()
+    {
+        return mSpaceMin;
+    }
+
+    /**
+     * Sets extra spacing for `axisMinimum` to be added to automatically calculated `axisMinimum`
+     */
+    public void setSpaceMin(float mSpaceMin)
+    {
+        this.mSpaceMin = mSpaceMin;
+    }
+
+    /**
+     * Gets extra spacing for `axisMaximum` to be added to automatically calculated `axisMaximum`
+     */
+    public float getSpaceMax()
+    {
+        return mSpaceMax;
+    }
+
+    /**
+     * Sets extra spacing for `axisMaximum` to be added to automatically calculated `axisMaximum`
+     */
+    public void setSpaceMax(float mSpaceMax)
+    {
+        this.mSpaceMax = mSpaceMax;
     }
 }

@@ -56,7 +56,7 @@ public class StackedBarActivity extends DemoBase implements OnSeekBarChangeListe
         mChart = (BarChart) findViewById(R.id.chart1);
         mChart.setOnChartValueSelectedListener(this);
 
-        mChart.setDescription("");
+        mChart.getDescription().setEnabled(false);
 
         // if more than 60 entries are displayed in the chart, no values will be
         // drawn
@@ -88,7 +88,10 @@ public class StackedBarActivity extends DemoBase implements OnSeekBarChangeListe
         mSeekBarY.setProgress(100);
 
         Legend l = mChart.getLegend();
-        l.setPosition(LegendPosition.BELOW_CHART_RIGHT);
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        l.setDrawInside(false);
         l.setFormSize(8f);
         l.setFormToTextSpace(4f);
         l.setXEntrySpace(6f);

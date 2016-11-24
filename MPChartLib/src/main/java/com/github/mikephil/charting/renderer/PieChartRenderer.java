@@ -199,6 +199,9 @@ public class PieChartRenderer extends DataRenderer {
      */
     protected float getSliceSpace(IPieDataSet dataSet) {
 
+        if (!dataSet.isAutomaticallyDisableSliceSpacingEnabled())
+            return dataSet.getSliceSpace();
+
         float spaceSizeRatio = dataSet.getSliceSpace() / mViewPortHandler.getSmallestContentExtension();
         float minValueRatio = dataSet.getYMin() / mChart.getData().getYValueSum() * 2;
 
@@ -229,7 +232,7 @@ public class PieChartRenderer extends DataRenderer {
         int visibleAngleCount = 0;
         for (int j = 0; j < entryCount; j++) {
             // draw only if the value is greater than zero
-            if ((Math.abs(dataSet.getEntryForIndex(j).getY()) > 0.000001)) {
+            if ((Math.abs(dataSet.getEntryForIndex(j).getY()) > Utils.FLOAT_EPSILON)) {
                 visibleAngleCount++;
             }
         }
@@ -244,7 +247,7 @@ public class PieChartRenderer extends DataRenderer {
             Entry e = dataSet.getEntryForIndex(j);
 
             // draw only if the value is greater than zero
-            if ((Math.abs(e.getY()) > 0.000001)) {
+            if ((Math.abs(e.getY()) > Utils.FLOAT_EPSILON)) {
 
                 if (!mChart.needsHighlight(j)) {
 
@@ -263,15 +266,13 @@ public class PieChartRenderer extends DataRenderer {
 
                     mPathBuffer.reset();
 
-                    float arcStartPointX = 0.f, arcStartPointY = 0.f;
+                    float arcStartPointX = center.x + radius * (float) Math.cos(startAngleOuter * Utils.FDEG2RAD);
+                    float arcStartPointY = center.y + radius * (float) Math.sin(startAngleOuter * Utils.FDEG2RAD);
 
-                    if (sweepAngleOuter % 360f == 0.f) {
+                    if (sweepAngleOuter >= 360.f && sweepAngleOuter % 360f <= Utils.FLOAT_EPSILON) {
                         // Android is doing "mod 360"
                         mPathBuffer.addCircle(center.x, center.y, radius, Path.Direction.CW);
                     } else {
-
-                        arcStartPointX = center.x + radius * (float) Math.cos(startAngleOuter * Utils.FDEG2RAD);
-                        arcStartPointY = center.y + radius * (float) Math.sin(startAngleOuter * Utils.FDEG2RAD);
 
                         mPathBuffer.moveTo(arcStartPointX, arcStartPointY);
 
@@ -317,7 +318,7 @@ public class PieChartRenderer extends DataRenderer {
                         }
                         final float endAngleInner = startAngleInner + sweepAngleInner;
 
-                        if (sweepAngleOuter % 360f == 0.f) {
+                        if (sweepAngleOuter >= 360.f && sweepAngleOuter % 360f <= Utils.FLOAT_EPSILON) {
                             // Android is doing "mod 360"
                             mPathBuffer.addCircle(center.x, center.y, innerRadius, Path.Direction.CCW);
                         } else {
@@ -334,7 +335,7 @@ public class PieChartRenderer extends DataRenderer {
                         }
                     } else {
 
-                        if (sweepAngleOuter % 360f != 0.f) {
+                        if (sweepAngleOuter % 360f > Utils.FLOAT_EPSILON) {
                             if (accountForSliceSpacing) {
 
                                 float angleMiddle = startAngleOuter + sweepAngleOuter / 2.f;
@@ -414,6 +415,8 @@ public class PieChartRenderer extends DataRenderer {
 
         c.save();
 
+        float offset = Utils.convertDpToPixel(5.f);
+
         for (int i = 0; i < dataSets.size(); i++) {
 
             IPieDataSet dataSet = dataSets.get(i);
@@ -438,8 +441,6 @@ public class PieChartRenderer extends DataRenderer {
 
             mValueLinePaint.setColor(dataSet.getValueLineColor());
             mValueLinePaint.setStrokeWidth(Utils.convertDpToPixel(dataSet.getValueLineWidth()));
-
-            float offset = Utils.convertDpToPixel(5.f);
 
             final float sliceSpace = getSliceSpace(dataSet);
 
@@ -509,13 +510,22 @@ public class PieChartRenderer extends DataRenderer {
                     if (transformedAngle % 360.0 >= 90.0 && transformedAngle % 360.0 <= 270.0) {
                         pt2x = pt1x - polyline2Width;
                         pt2y = pt1y;
+
                         mValuePaint.setTextAlign(Align.RIGHT);
+
+                        if(drawXOutside)
+                            mEntryLabelsPaint.setTextAlign(Align.RIGHT);
+
                         labelPtx = pt2x - offset;
                         labelPty = pt2y;
                     } else {
                         pt2x = pt1x + polyline2Width;
                         pt2y = pt1y;
                         mValuePaint.setTextAlign(Align.LEFT);
+
+                        if(drawXOutside)
+                            mEntryLabelsPaint.setTextAlign(Align.LEFT);
+
                         labelPtx = pt2x + offset;
                         labelPty = pt2y;
                     }
@@ -762,7 +772,7 @@ public class PieChartRenderer extends DataRenderer {
             int visibleAngleCount = 0;
             for (int j = 0; j < entryCount; j++) {
                 // draw only if the value is greater than zero
-                if ((Math.abs(set.getEntryForIndex(j).getY()) > 0.000001)) {
+                if ((Math.abs(set.getEntryForIndex(j).getY()) > Utils.FLOAT_EPSILON)) {
                     visibleAngleCount++;
                 }
             }
@@ -808,7 +818,7 @@ public class PieChartRenderer extends DataRenderer {
 
             mPathBuffer.reset();
 
-            if (sweepAngleOuter % 360f == 0.f) {
+            if (sweepAngleOuter >= 360.f && sweepAngleOuter % 360f <= Utils.FLOAT_EPSILON) {
                 // Android is doing "mod 360"
                 mPathBuffer.addCircle(center.x, center.y, highlightedRadius, Path.Direction.CW);
             } else {
@@ -865,7 +875,7 @@ public class PieChartRenderer extends DataRenderer {
                 }
                 final float endAngleInner = startAngleInner + sweepAngleInner;
 
-                if (sweepAngleOuter % 360f == 0.f) {
+                if (sweepAngleOuter >= 360.f && sweepAngleOuter % 360f <= Utils.FLOAT_EPSILON) {
                     // Android is doing "mod 360"
                     mPathBuffer.addCircle(center.x, center.y, innerRadius, Path.Direction.CCW);
                 } else {
@@ -882,7 +892,7 @@ public class PieChartRenderer extends DataRenderer {
                 }
             } else {
 
-                if (sweepAngleOuter % 360f != 0.f) {
+                if (sweepAngleOuter % 360f > Utils.FLOAT_EPSILON) {
 
                     if (accountForSliceSpacing) {
                         final float angleMiddle = startAngleOuter + sweepAngleOuter / 2.f;
@@ -949,7 +959,7 @@ public class PieChartRenderer extends DataRenderer {
             Entry e = dataSet.getEntryForIndex(j);
 
             // draw only if the value is greater than zero
-            if ((Math.abs(e.getY()) > 0.000001)) {
+            if ((Math.abs(e.getY()) > Utils.FLOAT_EPSILON)) {
 
                 float x = (float) ((r - circleRadius)
                         * Math.cos(Math.toRadians((angle + sliceAngle)

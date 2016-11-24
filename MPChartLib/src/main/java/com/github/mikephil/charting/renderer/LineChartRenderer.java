@@ -65,7 +65,8 @@ public class LineChartRenderer extends LineRadarRenderer {
     }
 
     @Override
-    public void initBuffers() { }
+    public void initBuffers() {
+    }
 
     @Override
     public void drawData(Canvas c) {
@@ -146,7 +147,7 @@ public class LineChartRenderer extends LineRadarRenderer {
 
             for (int j = mXBounds.min + 1; j <= mXBounds.range + mXBounds.min; j++) {
 
-                prev = dataSet.getEntryForIndex(j - 1);
+                prev = cur;
                 cur = dataSet.getEntryForIndex(j);
 
                 final float cpx = (prev.getX())
@@ -199,22 +200,33 @@ public class LineChartRenderer extends LineRadarRenderer {
             float curDx = 0f;
             float curDy = 0f;
 
-            Entry prevPrev = dataSet.getEntryForIndex(mXBounds.min);
-            Entry prev = prevPrev;
-            Entry cur = prev;
-            Entry next = dataSet.getEntryForIndex(mXBounds.min + 1);
+            // Take an extra point from the left, and an extra from the right.
+            // That's because we need 4 points for a cubic bezier (cubic=4), otherwise we get lines moving and doing weird stuff on the edges of the chart.
+            // So in the starting `prev` and `cur`, go -2, -1
+            // And in the `lastIndex`, add +1
 
-            if (cur == null || next == null) return;
+            final int firstIndex = mXBounds.min + 1;
+            final int lastIndex = mXBounds.min + mXBounds.range;
+
+            Entry prevPrev;
+            Entry prev = dataSet.getEntryForIndex(Math.max(firstIndex - 2, 0));
+            Entry cur = dataSet.getEntryForIndex(Math.max(firstIndex - 1, 0));
+            Entry next = cur;
+            int nextIndex = -1;
+
+            if (cur == null) return;
 
             // let the spline start
             cubicPath.moveTo(cur.getX(), cur.getY() * phaseY);
 
             for (int j = mXBounds.min + 1; j <= mXBounds.range + mXBounds.min; j++) {
 
-                prevPrev = dataSet.getEntryForIndex(j == 1 ? 0 : j - 2);
-                prev = dataSet.getEntryForIndex(j - 1);
-                cur = dataSet.getEntryForIndex(j);
-                next = mXBounds.max > j + 1 ? dataSet.getEntryForIndex(j + 1) : cur;
+                prevPrev = prev;
+                prev = cur;
+                cur = nextIndex == j ? next : dataSet.getEntryForIndex(j);
+
+                nextIndex = j + 1 < dataSet.getEntryCount() ? j + 1 : j;
+                next = dataSet.getEntryForIndex(nextIndex);
 
                 prevDx = (cur.getX() - prevPrev.getX()) * intensity;
                 prevDy = (cur.getY() - prevPrev.getY()) * intensity;
@@ -232,7 +244,7 @@ public class LineChartRenderer extends LineRadarRenderer {
 
             cubicFillPath.reset();
             cubicFillPath.addPath(cubicPath);
-            // create a new path, this is bad for performance
+
             drawCubicFill(mBitmapCanvas, dataSet, cubicFillPath, trans, mXBounds);
         }
 
@@ -252,8 +264,8 @@ public class LineChartRenderer extends LineRadarRenderer {
         float fillMin = dataSet.getFillFormatter()
                 .getFillLinePosition(dataSet, mChart);
 
-        spline.lineTo(bounds.min + bounds.range, fillMin);
-        spline.lineTo(bounds.min, fillMin);
+        spline.lineTo(dataSet.getEntryForIndex(bounds.min + bounds.range).getX(), fillMin);
+        spline.lineTo(dataSet.getEntryForIndex(bounds.min).getX(), fillMin);
         spline.close();
 
         trans.pathValueToPixel(spline);
@@ -300,6 +312,11 @@ public class LineChartRenderer extends LineRadarRenderer {
 
         mXBounds.set(mChart, dataSet);
 
+        // if drawing filled is enabled
+        if (dataSet.isDrawFilledEnabled() && entryCount > 0) {
+            drawLinearFill(c, dataSet, trans, mXBounds);
+        }
+
         // more than 1 color
         if (dataSet.getColors().size() > 1) {
 
@@ -345,8 +362,6 @@ public class LineChartRenderer extends LineRadarRenderer {
                 // make sure the lines don't do shitty things outside
                 // bounds
                 if (!mViewPortHandler.isInBoundsLeft(mLineBuffer[2])
-                        || (!mViewPortHandler.isInBoundsTop(mLineBuffer[1]) && !mViewPortHandler
-                        .isInBoundsBottom(mLineBuffer[3]))
                         || (!mViewPortHandler.isInBoundsTop(mLineBuffer[1]) && !mViewPortHandler
                         .isInBoundsBottom(mLineBuffer[3])))
                     continue;
@@ -403,11 +418,6 @@ public class LineChartRenderer extends LineRadarRenderer {
         }
 
         mRenderPaint.setPathEffect(null);
-
-        // if drawing filled is enabled
-        if (dataSet.isDrawFilledEnabled() && entryCount > 0) {
-            drawLinearFill(c, dataSet, trans, mXBounds);
-        }
     }
 
     protected Path mGenerateFilledPathBuffer = new Path();
@@ -440,7 +450,6 @@ public class LineChartRenderer extends LineRadarRenderer {
 
             if (currentStartIndex <= currentEndIndex) {
                 generateFilledPath(dataSet, currentStartIndex, currentEndIndex, filled);
-
 
                 trans.pathValueToPixel(filled);
 
@@ -505,7 +514,6 @@ public class LineChartRenderer extends LineRadarRenderer {
         }
 
         filled.close();
-
     }
 
     @Override
@@ -666,7 +674,7 @@ public class LineChartRenderer extends LineRadarRenderer {
             if (set == null || !set.isHighlightEnabled())
                 continue;
 
-            Entry e = set.getEntryForXValue(high.getX());
+            Entry e = set.getEntryForXValue(high.getX(), high.getY());
 
             if (!isInBoundsX(e, set))
                 continue;
