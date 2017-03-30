@@ -119,9 +119,6 @@ public class Legend extends ComponentBase {
      * the size of the legend forms/shapes
      */
     private float mFormSize = 8f;
-    
-    private float mFormLineWidth = 3f;
-
 
     /**
      * the size of the legend forms/shapes

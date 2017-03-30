@@ -1185,14 +1185,20 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
     public void setNoDataTextTypeface(Typeface t) {
         mInfoPaint.setTypeface(t);
     }
-
+    
     /**
-     * Sets the typeface to be used for the no data text.
+     * sets the size of the no data text in pixels, min 6f, max 16f
      *
-     * @param tf
+     * @param size
      */
-    public void setNoDataTextTypeface(Typeface tf) {
-        mInfoPaint.setTypeface(tf);
+    public void setNoDataTextSize(float size) {
+
+        if (size > 16f)
+            size = 16f;
+        if (size < 6f)
+            size = 6f;
+
+        mInfoPaint.setTextSize(Utils.convertDpToPixel(size));
     }
 
     /**
