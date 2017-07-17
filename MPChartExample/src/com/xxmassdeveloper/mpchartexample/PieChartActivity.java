@@ -67,15 +67,15 @@ public class PieChartActivity extends DemoBase implements OnSeekBarChangeListene
         mChart.setCenterText(generateCenterSpannableText());
 
         mChart.setDrawHoleEnabled(true);
-        mChart.setHoleColor(Color.WHITE);
+        mChart.setHoleColor(Color.TRANSPARENT);
 
-        mChart.setTransparentCircleColor(Color.WHITE);
-        mChart.setTransparentCircleAlpha(110);
+//        mChart.setTransparentCircleColor(Color.WHITE);
+//        mChart.setTransparentCircleAlpha(110);
 
         mChart.setHoleRadius(58f);
-        mChart.setTransparentCircleRadius(61f);
+//        mChart.setTransparentCircleRadius(61f);
 
-        mChart.setDrawCenterText(true);
+        mChart.setDrawCenterText(false);
 
         mChart.setRotationAngle(0);
         // enable rotation of the chart by touch
